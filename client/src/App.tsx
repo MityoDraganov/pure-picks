@@ -1,4 +1,11 @@
 import { Routes, Route } from "react-router-dom";
+
+import { AuthProvider } from "./contexts/AuthContext";
+import { CartProvider } from "./contexts/CartContext";
+
+import { NavigationBar } from "./Components/NavigationBar/NavigationBar";
+import { Toaster } from "./Components/ui/Toast/toaster";
+
 //static
 import { Home } from "./Pages/Home/Home";
 
@@ -7,28 +14,29 @@ import { Register } from "./Pages/Auth/Register";
 import { Login } from "./Pages/Auth/Login";
 
 import { Dashboard } from "./Pages/Dashboard/Dashboard";
-import { AuthProvider } from "./contexts/AuthContext";
-import { NavigationBar } from "./Components/NavigationBar/NavigationBar";
-import { Toaster } from "./Components/ui/Toast/toaster";
+import { Profile } from "./Pages/Auth/Profile";
 
 function App() {
   return (
     <>
       <Toaster />
       <AuthProvider>
-        <NavigationBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
+        <CartProvider>
+          <NavigationBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          <Route path="/auth">
-            <Route path="register/:option" element={<Register />} />
-            <Route path="login" element={<Login />} />
-          </Route>
+            <Route path="/auth">
+              <Route path="register/:option" element={<Register />} />
+              <Route path="login" element={<Login />} />
+              <Route path="profile" element={<Profile />} />
+            </Route>
 
-          <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="*" element={<Home />} />
-        </Routes>
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </CartProvider>
       </AuthProvider>
     </>
   );

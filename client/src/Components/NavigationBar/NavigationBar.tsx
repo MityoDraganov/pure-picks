@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 
-import { Home, LogOutIcon, User } from "lucide-react";
+import { Home, LogOutIcon, ShoppingCart, User } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import {
@@ -24,12 +24,14 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Logo } from "../logo";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Cart } from "../Cart";
 
 export const NavigationBar = () => {
   const { isAuthenticated, user, logoutHandler } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleSignOut = () => {
-    logoutHandler()
+    logoutHandler();
     navigate("/auth/login");
   };
 
@@ -40,6 +42,18 @@ export const NavigationBar = () => {
         <div className="flex items-center justify-between w-full space-x-4 md:block md:w-auto">
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
+              <Dialog>
+                <DialogTrigger>
+                  <Button size="icon" variant="secondary">
+                    <ShoppingCart />
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent className="p-6">
+                  <Cart />
+                </DialogContent>
+              </Dialog>
+
               <Button size="icon" asChild>
                 <Link to="/dashboard">
                   <Home />
@@ -62,13 +76,13 @@ export const NavigationBar = () => {
                       <span className="font-normal">{user?.user?.email}</span>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate("/profile")}>
-                      <Link to="/profile" className="flex items-center w-full">
+                    <DropdownMenuItem onClick={() => navigate("/auth/profile")}>
+                      <div className="flex items-center w-full">
                         <div className="flex items-center w-full gap-1">
                           <User color="#404040" size={20} />
                           <span className="text-md">Profile</span>
                         </div>
-                      </Link>
+                      </div>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <AlertDialogTrigger asChild>

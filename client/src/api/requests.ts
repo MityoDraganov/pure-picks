@@ -5,6 +5,9 @@ const endpoints = {
   //auth
   register: "auth/register",
   login: "auth/login",
+
+  //products
+  products: "products"
 };
 
 // --AUTH--
@@ -15,3 +18,11 @@ export const register = (body: IUser) => {
 export const login = (body: UserLoginData) => {
   return api.post(endpoints.login, body);
 };
+
+// --PRODUCTS--
+
+export const getAllProducts = () => {
+  return api.get(endpoints.products)
+}
+
+
