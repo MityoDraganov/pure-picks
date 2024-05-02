@@ -16,6 +16,7 @@ import { Rating } from "./Rating";
 import { QuantitySelect } from "./QuantitySelect";
 
 import { Bookmark, ShoppingCart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Product = (product: IProduct) => {
   const calculateAverageRating = (ratings: number[]): number => {
@@ -29,8 +30,8 @@ export const Product = (product: IProduct) => {
   const { addToCart } = useContext(CartContext);
 
   const handleAddToCart = () => {
-    addToCart(product, quantity)
-  }
+    addToCart(product, quantity);
+  };
 
   return (
     <Card className="flex items-start p-4">
@@ -58,21 +59,26 @@ export const Product = (product: IProduct) => {
       </CardContent>
       <CardFooter className="flex w-full items-start justify-between">
         <div className="flex flex-col gap-4 w-3/4 items-start">
-          <div className="flex gap-2 items-center">
-            <Avatar>
-              <AvatarImage
-                draggable={false}
-                src={`https://api.dicebear.com/7.x/initials/svg?seed=${product.seller.username}&radius=50&backgroundColor=a3a3a3&fontSize=35&bold=true`}
-                alt="User avatar"
-              />
-            </Avatar>
-            <h2 className="font-semibold text-lg">{product.seller.username}</h2>
-          </div>
+          <Link to={`/auth/profile/${product.seller._id}`}>
+            <div className="flex gap-2 items-center">
+              <Avatar>
+                <AvatarImage
+                  draggable={false}
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${product.seller.username}&radius=50&backgroundColor=a3a3a3&fontSize=35&bold=true`}
+                  alt="User avatar"
+                />
+              </Avatar>
+              <h2 className="font-semibold text-lg">
+                {product.seller.username}
+              </h2>
+            </div>
+          </Link>
           <div className="w-full flex flex-col gap-4">
             <h2 className="text-xl font-semibold">{product.name}</h2>
             <div>
               <Label>Description:</Label>
               <Textarea
+                readOnly
                 className="resize-none h-auto  w-full"
                 defaultValue={product.description}
               />

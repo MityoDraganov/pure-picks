@@ -65,15 +65,15 @@ export const NavigationBar = () => {
                   <DropdownMenuTrigger>
                     <Avatar>
                       <AvatarImage
-                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${user?.user?.username}&radius=50&backgroundColor=a3a3a3&fontSize=35&bold=true`}
+                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${user?.username}&radius=50&backgroundColor=a3a3a3&fontSize=35&bold=true`}
                         alt="User avatar"
                       />
                     </Avatar>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel className="flex flex-col">
-                      <span>{user?.user?.username}</span>
-                      <span className="font-normal">{user?.user?.email}</span>
+                      <span>{user?.username}</span>
+                      <span className="font-normal">{user?.email}</span>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/auth/profile")}>

@@ -29,7 +29,8 @@ function App() {
             <Route path="/auth">
               <Route path="register/:option" element={<Register />} />
               <Route path="login" element={<Login />} />
-              <Route path="profile" element={<Profile />} />
+              <Route path="profile" element={<Profile isIndividual />} />
+              <Route path="profile/:sellerId" element={<Profile />} />
             </Route>
 
             <Route path="/dashboard" element={<Dashboard />} />

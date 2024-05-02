@@ -7,7 +7,7 @@ const endpoints = {
   login: "auth/login",
 
   //products
-  products: "products"
+  products: (sellerId: string | null) => sellerId ?  `products?seller=${sellerId}` :"products"
 };
 
 // --AUTH--
@@ -22,7 +22,10 @@ export const login = (body: UserLoginData) => {
 // --PRODUCTS--
 
 export const getAllProducts = () => {
-  return api.get(endpoints.products)
+  return api.get(endpoints.products(null))
 }
 
+export const getProductsBySeller = (sellerId: string) => {
+  return api.get(endpoints.products(sellerId))
+}
 

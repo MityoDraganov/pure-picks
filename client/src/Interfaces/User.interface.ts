@@ -1,4 +1,5 @@
 export interface IUser {
+  _id: string;
   username: string;
   email: string;
   password: string;
@@ -12,14 +13,11 @@ export interface UserLoginData {
 }
 
 export interface IUserDto {
-  user: {
-    username: string;
-    email: string;
-    type: string;
-    _id: string;
-    __v: number;
-  };
-  token: string;
+  username: string;
+  email: string;
+  type: string;
+  _id: string;
+  __v: number;
 }
 
 export interface AuthenticationResponse {
