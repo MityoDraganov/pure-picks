@@ -2,15 +2,22 @@ import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 
 import { Avatar, AvatarImage } from "../../Components/ui/avatar";
-import { Card } from "../../Components/ui/card";
+import { Card, CardHeader } from "../../Components/ui/card";
+import { IndividualPfComp } from "./components/IndividualPfComp";
+import { SellerPfComp } from "./components/SellerPfComp";
+import { useParams } from "react-router-dom";
 
-export const Profile = ({ isIndividual }: { isIndividual?: boolean }) => {
+export const Profile = () => {
+  const { userId } = useParams();
+
   const { user } = useContext(AuthContext);
+
+  console.log(user);
 
   return (
     <div className="w-screen h-screen overflow-hidden">
       <Card className="w-1/2 p-4 mx-auto mt-10 h-[75%] flex flex-col">
-        <div className="h-[15%] flex gap-2 items-center">
+        <CardHeader className="h-[15%] flex flex-row gap-2 items-center">
           <Avatar className="w-16 h-16">
             <AvatarImage
               draggable={false}
@@ -20,7 +27,10 @@ export const Profile = ({ isIndividual }: { isIndividual?: boolean }) => {
           </Avatar>
 
           <h2 className="text-xl font-medium">{user?.username}</h2>
-        </div>
+        </CardHeader>
+        {user?.type === "buyer" && <IndividualPfComp />}
+        {user?.type === "deliverer" && <h1>!to do!</h1>}
+        {user?.type === "farmer" && <SellerPfComp />}
       </Card>
     </div>
   );

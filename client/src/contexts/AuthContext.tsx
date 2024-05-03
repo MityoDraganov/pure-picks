@@ -30,8 +30,9 @@ export function AuthProvider(props: any) {
 
   useEffect(() => {
     if (localStorage["Authorization"]) {
+      
       const data = JSON.parse(localStorage["Authorization"]);
-      setAuth(data);
+      setAuth(data.user);
       setToken(data.token)
     }
   }, [AuthContext]);

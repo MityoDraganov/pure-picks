@@ -14,9 +14,11 @@ export const Dashboard = () => {
 
   return (
     <div className="p-4">
-      {products?.map((x) => (
-        <Product {...x} key={x._id}/>
-      ))}
+      {products && products?.length > 0 ? (
+        products?.map((x) => <Product {...x} key={x._id} />)
+      ) : (
+        <h1>No products yet</h1>
+      )}
     </div>
   );
 };
