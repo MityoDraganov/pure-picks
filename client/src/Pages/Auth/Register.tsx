@@ -1,7 +1,7 @@
 import useFormData from "../../hooks/useForm";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { IUser } from "../../Interfaces/User.interface";
+import { IUser, UserRegisterData } from "../../Interfaces/User.interface";
 
 import { InputGroup } from "../../Components/InputGroup";
 import { Button } from "../../Components/ui/button";
@@ -19,7 +19,7 @@ export const Register = () => {
   const { option } = useParams<{ option: string }>();
   const { signUser } = useContext(AuthContext);
 
-  const [authData, handleInputChange] = useFormData<IUser>({
+  const [authData, handleInputChange] = useFormData<UserRegisterData>({
     username: "",
     email: "",
     password: "",

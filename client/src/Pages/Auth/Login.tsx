@@ -19,7 +19,8 @@ export const Login = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const response = await login(authData);
-
+    console.log(response);
+    
     signUser(response);
     navigate("/dashboard");
   };

@@ -76,7 +76,7 @@ export const NavigationBar = () => {
                       <span className="font-normal">{user?.email}</span>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate("/auth/profile")}>
+                    <DropdownMenuItem onClick={() => navigate(`/auth/profile/${user?._id}`)}>
                       <div className="flex items-center w-full">
                         <div className="flex items-center w-full gap-1">
                           <User color="#404040" size={20} />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IProduct } from "../../Interfaces/Product.interface";
 import { getAllProducts } from "../../api/requests";
-import { Product } from "./components/Product";
+import { Product } from "../../Components/Product/Product";
 
 export const Dashboard = () => {
   const [products, setProducts] = useState<IProduct[]>();
@@ -15,7 +15,7 @@ export const Dashboard = () => {
   return (
     <div className="p-4">
       {products && products?.length > 0 ? (
-        products?.map((x) => <Product {...x} key={x._id} />)
+        products?.map((x) => <Product product={x} key={x._id}/>)
       ) : (
         <h1>No products yet</h1>
       )}

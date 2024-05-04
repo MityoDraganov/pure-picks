@@ -1,4 +1,4 @@
-import { IUser, UserLoginData } from "../Interfaces/User.interface";
+import { UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
 import * as api from "./api";
 
 const endpoints = {
@@ -11,7 +11,7 @@ const endpoints = {
 };
 
 // --AUTH--
-export const register = (body: IUser) => {
+export const register = (body: UserRegisterData) => {
   return api.post(endpoints.register, body);
 };
 
@@ -26,6 +26,8 @@ export const getAllProducts = () => {
 }
 
 export const getProductsBySeller = (sellerId: string) => {
+  console.log('here');
+  
   return api.get(endpoints.products(sellerId))
 }
 

@@ -1,14 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
-import { Button } from "../../../Components/ui/button";
-import { Input } from "../../../Components/ui/input";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
 import { Minus, Plus } from "lucide-react";
 
 export const QuantitySelect = ({
   setQuantity,
   quantity,
+  asCard,
 }: {
   setQuantity: Dispatch<SetStateAction<number>>;
   quantity: number;
+  asCard?: boolean;
 }) => {
   const handleDecrement = () => {
     if (quantity > 1) {
@@ -28,14 +30,14 @@ export const QuantitySelect = ({
   };
 
   return (
-    <div className="flex gap-1">
+    <div className={`w-fit flex gap-1 ${asCard ? "m-auto justify-center" : ""}`}>
       <Button size="icon" variant={"secondary"} onClick={handleDecrement}>
         <Minus />
       </Button>
 
       <Input
         type="number"
-        className="w-fit"
+        className="w-1/2"
         value={quantity}
         onChange={handleChange}
       />

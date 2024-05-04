@@ -11,7 +11,6 @@ export const Profile = () => {
   const { userId } = useParams();
 
   const { user } = useContext(AuthContext);
-
   console.log(user);
 
   return (
@@ -30,7 +29,7 @@ export const Profile = () => {
         </CardHeader>
         {user?.type === "buyer" && <IndividualPfComp />}
         {user?.type === "deliverer" && <h1>!to do!</h1>}
-        {user?.type === "farmer" && <SellerPfComp />}
+        {user?.type === "farmer" && <SellerPfComp userId={userId} />}
       </Card>
     </div>
   );

@@ -13,35 +13,30 @@ interface IAuthContext {
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider(props: any) {
-  const [auth, setAuth] = useState<IUserDto | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [auth, setAuth] = useState<AuthenticationResponse | null>(null);
 
   const signUser = (data: AuthenticationResponse) => {
     localStorage.setItem("Authorization", JSON.stringify(data));
-    setAuth(data.user);
-    setToken(data.token);
+    setAuth(data);
   };
 
   const logoutHandler = () => {
     localStorage.removeItem("Authorization");
     setAuth(null);
-    setToken(null);
   };
 
   useEffect(() => {
     if (localStorage["Authorization"]) {
-      
       const data = JSON.parse(localStorage["Authorization"]);
-      setAuth(data.user);
-      setToken(data.token)
+      setAuth(data);
     }
   }, [AuthContext]);
 
   const authContextValues: IAuthContext = {
     signUser,
     user: auth,
-    token: token ?? null,
-    isAuthenticated: !!token,
+    token: auth?.token ?? null,
+    isAuthenticated: !!auth?.token,
     logoutHandler,
   };
 
