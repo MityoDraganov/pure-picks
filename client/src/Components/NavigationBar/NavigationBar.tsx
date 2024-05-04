@@ -42,16 +42,16 @@ export const NavigationBar = () => {
         <div className="flex items-center justify-between w-full space-x-4 md:block md:w-auto">
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
-              <Dialog>
+              <Dialog >
                 <DialogTrigger>
                   <Button size="icon" variant="secondary">
                     <ShoppingCart />
                   </Button>
                 </DialogTrigger>
 
-                <DialogContent className="p-6">
+                
                   <Cart />
-                </DialogContent>
+               
               </Dialog>
 
               <Button size="icon" asChild>

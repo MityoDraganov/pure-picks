@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import { IProduct } from "../../Interfaces/Product.interface";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
@@ -19,10 +19,16 @@ export const Product = ({
   product,
   asCard,
   isOwner,
+  closeModal,
+  open,
+  onOpenChange,
 }: {
   product: IProduct;
   asCard?: boolean;
   isOwner?: boolean;
+  closeModal?: () => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) => {
   const calculateAverageRating = (ratings: number[]): number => {
     if (ratings.length === 0) return 0;
@@ -126,16 +132,16 @@ export const Product = ({
           <div className="w-full flex flex-col gap-2">
             {isOwner ? (
               <div className={`flex gap-4 ${asCard ? "flex-col" : "flex-row"}`}>
-                <Dialog>
-                  <DialogTrigger>
-                    <Button>
+                <Dialog open={open} onOpenChange={onOpenChange}>
+                  <DialogTrigger asChild>
+                    <Button asChild>
                       <div className="flex gap-2 items-center justify-center w-full h-full">
                         <p>Edit product</p>
                         <Settings />
                       </div>
                     </Button>
                   </DialogTrigger>
-                  <ProductModal product={product} />
+                  <ProductModal product={product} closeModal={closeModal} />
                 </Dialog>
               </div>
             ) : (

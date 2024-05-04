@@ -11,10 +11,11 @@ export const Profile = () => {
   const { userId } = useParams();
 
   const { user } = useContext(AuthContext);
+  
 
   return (
-    <div className="w-screen h-screen overflow-hidden">
-      <Card className="w-1/2 p-4 mx-auto mt-10 h-[75%] flex flex-col">
+    <div className="w-screen h-screen mb-24">
+      <Card className="w-1/2 p-4 mx-auto mt-10 flex flex-col pb-10">
         <CardHeader className="h-[15%] flex flex-row gap-2 items-center">
           <Avatar className="w-16 h-16">
             <AvatarImage

@@ -21,7 +21,13 @@ import { Label } from "../../ui/label";
 import useFormData from "../../../hooks/useForm";
 import { createProduct } from "../../../api/requests";
 
-export const ProductModal = ({ product }: { product?: IProduct }) => {
+export const ProductModal = ({
+  product,
+  closeModal,
+}: {
+  product?: IProduct;
+  closeModal?: () => void;
+}) => {
   const [productData, setProductData] = useFormData<ProductMutableData>({
     name: product?.name ?? "",
     description: product?.description ?? "",
@@ -31,13 +37,12 @@ export const ProductModal = ({ product }: { product?: IProduct }) => {
     quantity: product?.quantity ?? 0,
   });
 
-  console.log(product);
-  
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await createProduct(productData);
+    closeModal?.();
   };
+
   return (
     <DialogContent className="h-fit">
       <div className="w-full p-[5%] m-auto flex flex-col gap-4">
@@ -74,7 +79,9 @@ export const ProductModal = ({ product }: { product?: IProduct }) => {
               setProductData({ id: "category", value: value })
             }
           >
-            <SelectTrigger className={`${!productData.category ? "bg-muted" : ""}`}>
+            <SelectTrigger
+              className={`${!productData.category ? "bg-muted" : ""}`}
+            >
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -121,7 +128,14 @@ export const ProductModal = ({ product }: { product?: IProduct }) => {
             className="text-md flex gap-2 items-center justify-center w-2/3 m-auto"
             type="submit"
           >
-            Add <Plus />
+            {product ? (
+              <p>Edit</p>
+            ) : (
+              <>
+                <p>Add</p>
+                <Plus />
+              </>
+            )}
           </Button>
         </form>
       </div>

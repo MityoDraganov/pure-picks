@@ -12,6 +12,7 @@ import {
 import { CartContext } from "../contexts/CartContext";
 import { Button } from "./ui/button";
 import { Receipt, X } from "lucide-react";
+import { DialogContent } from "./ui/dialog";
 
 export const Cart = () => {
   const { cart, removeFromCart } = useContext(CartContext);
@@ -20,7 +21,11 @@ export const Cart = () => {
     0
   );
   return (
-    <>
+    <DialogContent
+      className={`${
+        cart && cart?.length > 0 ? "h-full" : "h-fit"
+      } p-6 overflow-hidden`}
+    >
       {cart && cart?.length > 0 ? (
         <Table className="w-full h-full text-center">
           <TableHeader>
@@ -91,6 +96,6 @@ export const Cart = () => {
       ) : (
         <p>No added products in cart yet!</p>
       )}
-    </>
+    </DialogContent>
   );
 };
