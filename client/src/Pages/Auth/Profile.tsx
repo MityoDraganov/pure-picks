@@ -11,7 +11,6 @@ export const Profile = () => {
   const { userId } = useParams();
 
   const { user } = useContext(AuthContext);
-  console.log(user);
 
   return (
     <div className="w-screen h-screen overflow-hidden">

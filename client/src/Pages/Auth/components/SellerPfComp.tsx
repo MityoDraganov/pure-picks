@@ -21,10 +21,6 @@ export const SellerPfComp = ({ userId }: { userId: string | undefined }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
-
   return (
     <CardContent className="flex flex-col gap-4">
       <Dialog>
@@ -39,7 +35,7 @@ export const SellerPfComp = ({ userId }: { userId: string | undefined }) => {
 
       <div>
         {products.map((x) => (
-          <div className="w-[30%]">
+          <div className="w-[30%]" key={x._id}>
             <Product product={x} asCard isOwner />
           </div>
         ))}

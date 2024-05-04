@@ -1,57 +1,128 @@
-import { useState } from "react";
+import { FormEvent } from "react";
+
+import {
+  IProduct,
+  ProductMutableData,
+} from "../../../Interfaces/Product.interface";
 import { InputGroup } from "../../InputGroup";
 import { DialogContent } from "../../ui/dialog";
-import { IProduct } from "../../../Interfaces/Product.interface";
 import { Button } from "../../ui/button";
 import { Textarea } from "../../ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../../ui/select";
-import { SelectValue } from "@radix-ui/react-select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select";
 
-export const ProductModal = ({ mode }: { mode?: string }) => {
-  const [productData, setProductData] = useState<IProduct>();
+import { Apple, Beef, Milk, Plus, Salad, Utensils } from "lucide-react";
+import { Label } from "../../ui/label";
+import useFormData from "../../../hooks/useForm";
+import { createProduct } from "../../../api/requests";
 
-  const handleInputChange = () => {};
-  const handleSubmit = () => {};
+export const ProductModal = ({ product }: { product?: IProduct }) => {
+  const [productData, setProductData] = useFormData<ProductMutableData>({
+    name: product?.name ?? "",
+    description: product?.description ?? "",
+    category: product?.category ?? "",
+    file: null,
+    price: product?.price ?? 0,
+    quantity: product?.quantity ?? 0,
+  });
+
+  console.log(product);
+  
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await createProduct(productData);
+  };
   return (
-    <DialogContent className="h-[70%]">
-      <div className="w-full p-[5%] m-auto absolute top-[30%] left-1/2 translate-x-[-50%] translate-y-[-50%] flex flex-col gap-4">
+    <DialogContent className="h-fit">
+      <div className="w-full p-[5%] m-auto flex flex-col gap-4">
         <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
           <InputGroup
             label="Name"
             placeHolder=""
             value={productData?.name}
-            onChange={handleInputChange}
+            onChange={setProductData}
             id="name"
           />
 
-          <Textarea
-            value={productData?.description}
-            onChange={handleInputChange}
-            id="description"
-          />
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={productData?.description}
+              className={`${!productData?.description ? "bg-muted" : ""}`}
+              onChange={setProductData}
+              id="description"
+            />
+          </div>
 
           <InputGroup
             label="Price"
             placeHolder=""
-            value={productData?.name}
-            onChange={handleInputChange}
+            value={productData?.price}
+            onChange={setProductData}
             id="price"
             type="number"
           />
 
-          <Select>
-            <SelectTrigger>
+          <Select
+            onValueChange={(value) =>
+              setProductData({ id: "category", value: value })
+            }
+          >
+            <SelectTrigger className={`${!productData.category ? "bg-muted" : ""}`}>
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="vegetables">Vegetables</SelectItem>
-              <SelectItem value="fruits">Fruits</SelectItem>
-              <SelectItem value="dairy">Dairy</SelectItem>
-              <SelectItem value="meats">Meats</SelectItem>
+              <SelectItem value="vegetables">
+                <p className="w-full flex flex-row gap-2">
+                  Vegetables <Salad />
+                </p>
+              </SelectItem>
+              <SelectItem value="fruits">
+                <p className="w-full flex flex-row gap-2">
+                  Fruits <Apple />
+                </p>
+              </SelectItem>
+              <SelectItem value="dairy">
+                <p className="w-full flex flex-row gap-2">
+                  Dairy <Milk />
+                </p>
+              </SelectItem>
+              <SelectItem value="meats">
+                <p className="w-full flex flex-row gap-2">
+                  Meats
+                  <Beef />
+                </p>
+              </SelectItem>
+              <SelectItem value="other">
+                <p className="w-full flex flex-row gap-2">
+                  Other
+                  <Utensils />
+                </p>
+              </SelectItem>
             </SelectContent>
           </Select>
 
-          <Button className="text-md">Add </Button>
+          <InputGroup
+            label="Content"
+            placeHolder=""
+            onChange={setProductData}
+            id="file"
+            type="file"
+            multiple
+          />
+
+          <Button
+            className="text-md flex gap-2 items-center justify-center w-2/3 m-auto"
+            type="submit"
+          >
+            Add <Plus />
+          </Button>
         </form>
       </div>
     </DialogContent>

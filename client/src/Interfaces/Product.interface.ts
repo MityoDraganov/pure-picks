@@ -11,3 +11,12 @@ export interface IProduct {
   seller: IUser;
   ratings: number[];
 }
+
+export interface ProductMutableData {
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+  quantity: number;
+  file: File | null;
+}

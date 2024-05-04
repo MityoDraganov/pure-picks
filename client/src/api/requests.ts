@@ -1,3 +1,4 @@
+import { ProductMutableData } from "../Interfaces/Product.interface";
 import { UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
 import * as api from "./api";
 
@@ -26,8 +27,9 @@ export const getAllProducts = () => {
 }
 
 export const getProductsBySeller = (sellerId: string) => {
-  console.log('here');
-  
   return api.get(endpoints.products(sellerId))
 }
 
+export const createProduct = (data: ProductMutableData) => {
+  return api.post(endpoints.products(null), data, "formData")
+}

@@ -15,7 +15,8 @@ interface RequestOptions {
 const request = async (
   method: string,
   url: string,
-  data?: any
+  data?: any,
+  type?: string
 ): Promise<any> => {
   const options: RequestOptions = {
     method,
@@ -24,8 +25,23 @@ const request = async (
     },
   };
 
-  options.headers["content-type"] = "application/json";
-  options.body = JSON.stringify(data);
+  if (type === "formData") {
+    const formData = new FormData();
+    // Append each key-value pair to FormData
+    for (const key in data) {
+      // If the key is "file" and the value is a File object, append it directly with the key "file"
+      if (key === "file" && data[key] instanceof File) {
+        formData.append("file", data[key]);
+      } else {
+        // Otherwise, append as usual
+        formData.append(key, data[key]);
+      }
+    }
+    options.body = formData;
+  } else {
+    options.headers["content-type"] = "application/json";
+    options.body = JSON.stringify(data);
+  }
 
   if (localStorage["Authorization"]) {
     options.headers["Authorization"] = JSON.parse(

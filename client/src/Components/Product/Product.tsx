@@ -1,11 +1,7 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import { IProduct } from "../../Interfaces/Product.interface";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Label } from "../ui/label";
@@ -17,6 +13,7 @@ import { QuantitySelect } from "./components/QuantitySelect";
 
 import { Bookmark, Settings, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ProductModal } from "./modals/ProductModal";
 
 export const Product = ({
   product,
@@ -129,12 +126,17 @@ export const Product = ({
           <div className="w-full flex flex-col gap-2">
             {isOwner ? (
               <div className={`flex gap-4 ${asCard ? "flex-col" : "flex-row"}`}>
-                <Button onClick={handleAddToCart}>
-                  <div className="flex gap-2 items-center justify-center w-full h-full">
-                    <p>Edit product</p>
-                    <Settings />
-                  </div>
-                </Button>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button>
+                      <div className="flex gap-2 items-center justify-center w-full h-full">
+                        <p>Edit product</p>
+                        <Settings />
+                      </div>
+                    </Button>
+                  </DialogTrigger>
+                  <ProductModal product={product} />
+                </Dialog>
               </div>
             ) : (
               <div className={`flex gap-4 ${asCard ? "flex-col" : "flex-row"}`}>
