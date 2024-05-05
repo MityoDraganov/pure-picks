@@ -18,7 +18,7 @@ import { Profile } from "./Pages/Auth/Profile";
 
 function App() {
   return (
-    <>
+    <div className="h-screen">
       <Toaster />
       <AuthProvider>
         <CartProvider>
@@ -38,7 +38,7 @@ function App() {
           </Routes>
         </CartProvider>
       </AuthProvider>
-    </>
+    </div>
   );
 }
 

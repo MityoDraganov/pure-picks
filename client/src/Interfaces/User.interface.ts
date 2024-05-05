@@ -29,6 +29,8 @@ export interface IUserDto {
   type: string;
   _id: string;
   __v: number;
+  password?: string;
+  rePassword?: string;
 }
 
 export interface AuthenticationResponse {

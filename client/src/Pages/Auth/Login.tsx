@@ -24,7 +24,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="w-2/5 m-auto absolute top-[30%] left-1/2 translate-x-[-50%] translate-y-[-50%] flex flex-col gap-4">
+    <div className="w-2/5  absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col">
       <h2 className="text-center text-2xl">Login</h2>
       <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
         <InputGroup

@@ -7,7 +7,7 @@ const useFormData = <T extends {}>(
   (
     e:
       | ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-      | { id: string; value: string }
+      | { id: string, value: any }
       | FileList
   ) => void
 ] => {
@@ -16,7 +16,7 @@ const useFormData = <T extends {}>(
   const handleChange = (
     e:
       | ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-      | { id: string; value: string }
+      | { id: string; value: any }
       | FileList
   ) => {
     if ("target" in e) {
@@ -37,9 +37,7 @@ const useFormData = <T extends {}>(
       }
     } else if (
       "id" in e &&
-      "value" in e &&
-      typeof e.id === "string" &&
-      typeof e.value === "string"
+      "value" in e
     ) {
       const { id, value } = e;
       setFormData((prevState) => ({
@@ -58,5 +56,6 @@ const useFormData = <T extends {}>(
 
   return [formData, handleChange];
 };
+
 
 export default useFormData;

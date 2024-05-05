@@ -1,6 +1,9 @@
+import * as api from "./api";
+
+import { OrderDto } from "../Interfaces/Order.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
 import { UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
-import * as api from "./api";
+import { ICart } from "../Interfaces/Cart.interface";
 
 const endpoints = {
   //auth
@@ -8,7 +11,10 @@ const endpoints = {
   login: "auth/login",
 
   //products
-  products: (sellerId: string | null) => sellerId ?  `products?seller=${sellerId}` :"products"
+  products: (sellerId: string | null) => sellerId ?  `products?seller=${sellerId}` :"products",
+
+  //orders
+  orders: "orders"
 };
 
 // --AUTH--
@@ -32,4 +38,14 @@ export const getProductsBySeller = (sellerId: string) => {
 
 export const createProduct = (data: ProductMutableData) => {
   return api.post(endpoints.products(null), data, "formData")
+}
+
+// --ORDERS--
+
+export const getOrdersForBuyer = () => {
+  return api.get(endpoints.orders)
+}
+
+export const putOrder = (data: ICart[] | null) => {
+  return api.post(endpoints.orders, {products: data})
 }

@@ -17,6 +17,7 @@ import {
 
 export const SellerPfComp = ({ userId }: { userId: string | undefined }) => {
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [orders, setOrders] = useState()
   const [createOpen, setCreateOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
 
