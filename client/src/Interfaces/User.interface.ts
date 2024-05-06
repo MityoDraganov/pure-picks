@@ -41,3 +41,7 @@ export interface AuthenticationResponse {
   __v: number;
   token: string;
 }
+
+export interface IMarketplaceSettings {
+  documents: File[] | null;
+}
