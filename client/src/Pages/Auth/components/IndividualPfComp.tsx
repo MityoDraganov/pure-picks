@@ -14,8 +14,9 @@ export const IndividualPfComp = () => {
     }, []);
 
     return (
-        <CardContent className="flex flex-col gap-6">
-            <div>
+        <CardContent className="mt-5 flex flex-col gap-2 h-min">
+            <h2 className="text-xl font-semibold">Orders</h2>
+            <div className="h-full">
                 {(orders && orders.length > 0) ? orders.map((x: IOrder) => <Order {...x}/>) : <p>No orders yet!</p>}
             </div>
         </CardContent>

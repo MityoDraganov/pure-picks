@@ -18,7 +18,7 @@ import { Profile } from "./Pages/Auth/Profile";
 
 function App() {
   return (
-    <div className="h-screen">
+    <div className=" overflow-hidden">
       <Toaster />
       <AuthProvider>
         <CartProvider>

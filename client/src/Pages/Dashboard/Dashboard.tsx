@@ -13,7 +13,7 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <div className="p-4 flex flex-col gap-2">
+    <div className="p-4 flex flex-col gap-2 overflow-auto pb-10">
       {products && products?.length > 0 ? (
         products?.map((x) => <Product product={x} key={x._id}/>)
       ) : (

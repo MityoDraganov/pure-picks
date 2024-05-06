@@ -13,7 +13,7 @@ import {
     DialogTrigger,
 } from "../../Components/ui/dialog";
 import { Settings } from "lucide-react";
-import { IUserDto } from "../../Interfaces/User.interface";
+import { IUser, IUserDto } from "../../Interfaces/User.interface";
 import useFormData from "../../hooks/useForm";
 import { InputGroup } from "../../Components/InputGroup";
 import { Button } from "../../Components/ui/button";
@@ -21,6 +21,8 @@ import { Button } from "../../Components/ui/button";
 export const Profile = () => {
     const { userId } = useParams();
     const { user } = useContext(AuthContext);
+
+    const [userData, setUserData] = useState<IUser>()
 
     const [authData, handleInputChange] = useFormData<IUserDto>({} as IUserDto);
 

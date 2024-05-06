@@ -47,5 +47,7 @@ export const getOrdersForBuyer = () => {
 }
 
 export const putOrder = (data: ICart[] | null) => {
-  return api.post(endpoints.orders, {products: data})
+  console.log(data);
+  
+  return api.post(endpoints.orders, {orderedItems: data})
 }

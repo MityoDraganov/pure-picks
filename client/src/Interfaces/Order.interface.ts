@@ -10,12 +10,13 @@ export interface OrderDto {
 
 export interface IOrder {
     buyer: IUser;
-    orderedItems: {
+    orderedItems: [{
         product: IProduct;
         quantity: number;
-    };
-    putDate: Date
-    status: string
+    }];
+    putDate: Date;
+    status: string;
     __v: number;
     _id: string;
+    totalCp: number;
 }
