@@ -18,5 +18,5 @@ export interface ProductMutableData {
   description: string;
   category: string;
   quantity: number;
-  file: File | null;
+  files: FileList | null;
 }

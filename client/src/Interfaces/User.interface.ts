@@ -45,3 +45,11 @@ export interface AuthenticationResponse {
 export interface IMarketplaceSettings {
   documents: File[] | null;
 }
+
+export interface RequestVerification {
+  documents: File[] | null;
+  sellerLocation: {
+    latitude: number;
+    longitude: number;
+  }
+}

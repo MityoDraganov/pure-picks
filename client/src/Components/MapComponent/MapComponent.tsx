@@ -1,84 +1,93 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+
 import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMapEvents,
+    MapContainer,
+    TileLayer,
+    Marker,
+    Popup,
+    useMapEvents,
 } from "react-leaflet";
 
 interface MapComponentProps {
-  setPosition: React.Dispatch<React.SetStateAction<{ latitude: number; longitude: number } | null>>;
+    setPosition: React.Dispatch<
+        React.SetStateAction<{
+            latitude: number;
+            longitude: number;
+        }>
+    >;
+    sellerLocation: {
+        latitude: number;
+        longitude: number;
+    };
 }
 
-export const MapComponent: React.FC<MapComponentProps> = ({ setPosition }) => {
-  const [position, setPositionState] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+export const MapComponent: React.FC<MapComponentProps> = ({
+    setPosition,
+    sellerLocation,
+}) => {
+    const handleMapClick = (e: any) => {
+        setPosition({
+            latitude: e.latlng.lat,
+            longitude: e.latlng.lng,
+        });
+    };
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setPositionState({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
-          setPosition({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error getting current position:", error.message);
+    const SetViewOnClick = () => {
+        const map = useMapEvents({
+            click: handleMapClick,
+        });
+
+        return null;
+    };
+
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    setPosition({
+                        latitude: pos.coords.latitude,
+                        longitude: pos.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error(
+                        "Error getting current position:",
+                        error.message
+                    );
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
         }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, [setPosition]);
+    }, [setPosition, navigator.geolocation]);
 
-  const handleMapClick = (e: any) => {
-    setPositionState({
-      latitude: e.latlng.lat,
-      longitude: e.latlng.lng,
-    });
-    setPosition({
-      latitude: e.latlng.lat,
-      longitude: e.latlng.lng,
-    });
-  };
-
-  const SetViewOnClick = () => {
-    const map = useMapEvents({
-      click: handleMapClick,
-    });
-
-    return null;
-  };
-
-  return (
-    <>
-      {position && (
-        <MapContainer
-          center={position ? [position.latitude, position.longitude] : [0, 0]} // Use user's location if available, otherwise use [0, 0]
-          zoom={13}
-          style={{ height: "400px", width: "100%" }}
-        >
-          <SetViewOnClick />
-          {position && (
-            <Marker position={[position.latitude, position.longitude]}>
-              <Popup>
-                Latitude: {position.latitude}
-                <br />
-                Longitude: {position.longitude}
-              </Popup>
-            </Marker>
-          )}
-        </MapContainer>
-      )}
-      
-    </>
-  );
+    return (
+        <>
+            <MapContainer
+                center={[sellerLocation.latitude, sellerLocation.longitude]}
+                zoom={5}
+                style={{ height: "400px", width: "100%" }}
+            >
+                <SetViewOnClick />
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                {sellerLocation.latitude && sellerLocation.longitude && (
+                    <Marker
+                        position={[
+                            sellerLocation.latitude,
+                            sellerLocation.longitude,
+                        ]}
+                    >
+                        <Popup>
+                            Latitude: {sellerLocation.latitude}
+                            <br />
+                            Longitude: {sellerLocation.longitude}
+                        </Popup>
+                    </Marker>
+                )}
+            </MapContainer>
+        </>
+    );
 };

@@ -13,7 +13,7 @@ import {
     DialogTrigger,
 } from "../../Components/ui/dialog";
 import { Settings } from "lucide-react";
-import { IUser, IUserDto } from "../../Interfaces/User.interface";
+import { IUserDto } from "../../Interfaces/User.interface";
 import useFormData from "../../hooks/useForm";
 import { InputGroup } from "../../Components/InputGroup";
 import { Button } from "../../Components/ui/button";
@@ -33,8 +33,6 @@ export const Profile = () => {
         if (user?._id !== userId) {
             (async () => {
                 const fetchedUser = await getProfileData(userId);
-                console.log(fetchedUser);
-
                 if (fetchedUser) {
                     Object.keys(fetchedUser).forEach((key) => {
                         const userKey = key as keyof IUserDto; // Type assertion

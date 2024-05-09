@@ -32,12 +32,14 @@ export const ProductModal = ({
     name: product?.name ?? "",
     description: product?.description ?? "",
     category: product?.category ?? "",
-    file: null,
+    files: null,
     price: product?.price ?? 0,
     quantity: product?.quantity ?? 0,
   });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+
+    
     e.preventDefault();
     await createProduct(productData);
     closeModal?.();
@@ -119,7 +121,7 @@ export const ProductModal = ({
             label="Content"
             placeHolder=""
             onChange={setProductData}
-            id="file"
+            id="files"
             type="file"
             multiple
           />

@@ -2,7 +2,7 @@ import * as api from "./api";
 
 import { OrderDto } from "../Interfaces/Order.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
-import { UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
+import { IMarketplaceSettings, RequestVerification, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
 import { ICart } from "../Interfaces/Cart.interface";
 
 const endpoints = {
@@ -30,6 +30,10 @@ export const getProfileData = (userId: string | undefined) => {
     return api.get(endpoints.auth(userId))
 };
 
+export const requestVerification = (body: RequestVerification) => {
+    return api.post(endpoints.auth("verification/request"), body, "formData")
+}
+
 // --PRODUCTS--
 
 export const getAllProducts = () => {
@@ -51,7 +55,5 @@ export const getOrdersForBuyer = () => {
 };
 
 export const putOrder = (data: ICart[] | null) => {
-    console.log(data);
-
     return api.post(endpoints.orders, { orderedItems: data });
 };
