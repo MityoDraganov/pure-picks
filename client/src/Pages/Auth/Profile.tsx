@@ -57,7 +57,7 @@ export const Profile = () => {
     const handleSubmit = () => {};
 
     return (
-        <div className="w-screen h-screen mb-24">
+        <div className="w-screen mb-24">
             <Card className="w-1/2 p-4 mx-auto mt-10 flex flex-col pb-10">
                 <CardHeader className="h-[15%] flex flex-row items-center justify-between">
                     <div className="flex flex-row gap-2 items-center">
