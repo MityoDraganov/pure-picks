@@ -2,7 +2,7 @@ import * as api from "./api";
 
 import { OrderDto } from "../Interfaces/Order.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
-import { IMarketplaceSettings, RequestVerification, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
+import { IMarketplaceSettingsDto, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
 import { ICart } from "../Interfaces/Cart.interface";
 
 const endpoints = {
@@ -30,7 +30,7 @@ export const getProfileData = (userId: string | undefined) => {
     return api.get(endpoints.auth(userId))
 };
 
-export const requestVerification = (body: RequestVerification) => {
+export const requestVerification = (body: IMarketplaceSettingsDto) => {
     return api.post(endpoints.auth("verification/request"), body, "formData")
 }
 

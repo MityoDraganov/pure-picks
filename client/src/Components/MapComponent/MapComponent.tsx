@@ -1,93 +1,94 @@
-import { useEffect } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import {
-    MapContainer,
-    TileLayer,
-    Marker,
-    Popup,
-    useMapEvents,
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
 } from "react-leaflet";
 
 interface MapComponentProps {
-    setPosition: React.Dispatch<
-        React.SetStateAction<{
-            latitude: number;
-            longitude: number;
-        }>
-    >;
-    sellerLocation: {
-        latitude: number;
-        longitude: number;
-    };
+  handleSetLocation: (location: {
+    latitude: number;
+    longitude: number;
+  }) => void;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export const MapComponent: React.FC<MapComponentProps> = ({
-    setPosition,
-    sellerLocation,
+  handleSetLocation,
+  location,
 }) => {
-    const handleMapClick = (e: any) => {
-        setPosition({
-            latitude: e.latlng.lat,
-            longitude: e.latlng.lng,
-        });
-    };
+    const [mapCenter, setMapCenter] = useState<[number, number]>([0, 0]);
+    const mapRef = useRef<any>(null);
 
-    const SetViewOnClick = () => {
-        const map = useMapEvents({
-            click: handleMapClick,
-        });
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          handleSetLocation({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          });
 
-        return null;
-    };
-
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    setPosition({
-                        latitude: pos.coords.latitude,
-                        longitude: pos.coords.longitude,
-                    });
-                },
-                (error) => {
-                    console.error(
-                        "Error getting current position:",
-                        error.message
-                    );
-                }
-            );
-        } else {
-            console.error("Geolocation is not supported by this browser.");
+          setMapCenter([pos.coords.latitude, pos.coords.longitude])
+          mapRef.current.setView([location.latitude, location.longitude]);
+        },
+        (error) => {
+          console.error("Error getting current position:", error.message);
         }
-    }, [setPosition, navigator.geolocation]);
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, [setMapCenter, navigator.geolocation]);
 
-    return (
-        <>
-            <MapContainer
-                center={[sellerLocation.latitude, sellerLocation.longitude]}
-                zoom={5}
-                style={{ height: "400px", width: "100%" }}
-            >
-                <SetViewOnClick />
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                {sellerLocation.latitude && sellerLocation.longitude && (
-                    <Marker
-                        position={[
-                            sellerLocation.latitude,
-                            sellerLocation.longitude,
-                        ]}
-                    >
-                        <Popup>
-                            Latitude: {sellerLocation.latitude}
-                            <br />
-                            Longitude: {sellerLocation.longitude}
-                        </Popup>
-                    </Marker>
-                )}
-            </MapContainer>
-        </>
-    );
+
+
+  const handleMapClick = (e: any) => {
+    handleSetLocation({
+      latitude: e.latlng.lat,
+      longitude: e.latlng.lng,
+    });
+  };
+
+  const SetViewOnClick = () => {
+    const map = useMapEvents({
+      click: handleMapClick,
+    });
+
+    return null;
+  };
+
+
+  return (
+    <>
+      <MapContainer
+        center={mapCenter}
+        zoom={2}
+        style={{ width: "100%", aspectRatio: 2 / 1 }}
+        ref={mapRef}
+      >
+        <SetViewOnClick />
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {location.latitude !== 0 && location.longitude !== 0 && (
+          <Marker
+            position={[location.latitude, location.longitude]}
+          >
+            <Popup>
+              Latitude: {location.latitude}
+              <br />
+              Longitude: {location.longitude}
+            </Popup>
+          </Marker>
+        )}
+      </MapContainer>
+    </>
+  );
 };

@@ -2,6 +2,13 @@ import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import { IProduct } from "../../Interfaces/Product.interface";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Label } from "../ui/label";
@@ -65,18 +72,24 @@ export const Product = ({
                 <div className="w-full h-full">
                   <img
                     draggable={false}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-sm"
                     src={product.contentUrls[0]}
                   />
                 </div>
               </DialogTrigger>
               <DialogContent>
-                <div className="w-full flex flex-col">
-                  <img
-                    draggable={false}
-                    className="w-full h-full object-cover"
-                    src={product.contentUrls[0]}
-                  />
+                <Carousel className="w-[80%] flex flex-col m-auto">
+                  <CarouselContent>
+                    {product.contentUrls.map((x) => (
+                      <CarouselItem>
+                        <img
+                          draggable={false}
+                          className="w-full aspect-square object-cover rounded-sm"
+                          src={x}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
                   {asCard && (
                     <div>
                       <Label>Description:</Label>
@@ -87,7 +100,9 @@ export const Product = ({
                       />
                     </div>
                   )}
-                </div>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
               </DialogContent>
             </Dialog>
           </div>
@@ -101,7 +116,7 @@ export const Product = ({
         >
           {!isOwner && (
             <Link to={`/auth/profile/${product.seller._id}`}>
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center group">
                 <Avatar>
                   <AvatarImage
                     draggable={false}
@@ -109,14 +124,16 @@ export const Product = ({
                     alt="User avatar"
                   />
                 </Avatar>
-                <h2 className="font-semibold text-lg">
+                <h2 className="font-semibold text-lg group-hover:underline">
                   {product.seller.username}
                 </h2>
               </div>
             </Link>
           )}
           <div className="w-full flex flex-col gap-4">
-            <h2 className="text-xl font-semibold">{product.name}</h2>
+            <h2 className="text-xl font-semibold">
+              {product.name.charAt(0).toUpperCase() + product.name.slice(1)}
+            </h2>
             {!asCard && (
               <div>
                 <Label>Description:</Label>

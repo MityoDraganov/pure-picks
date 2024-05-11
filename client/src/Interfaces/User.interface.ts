@@ -31,6 +31,8 @@ export interface IUserDto {
   __v: number;
   password?: string;
   rePassword?: string;
+  VerifiedStatus: string;
+  marketplaceSettings: IMarketplaceSettings;
 }
 
 export interface AuthenticationResponse {
@@ -40,16 +42,24 @@ export interface AuthenticationResponse {
   _id: string;
   __v: number;
   token: string;
+  products: IProduct[];
+  VerifiedStatus: string;
+  marketplaceSettings: IMarketplaceSettings;
+}
+
+export interface IMarketplaceSettingsDto {
+  documents: File[] | null;
+
+  latitude: number;
+  longitude: number;
 }
 
 export interface IMarketplaceSettings {
-  documents: File[] | null;
-}
+  _id: string;
+  documents: string[] | null;
 
-export interface RequestVerification {
-  documents: File[] | null;
   sellerLocation: {
     latitude: number;
     longitude: number;
-  }
+  };
 }

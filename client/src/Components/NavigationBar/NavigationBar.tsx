@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 
 import { Home, LogOutIcon, ShoppingCart, User } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import {
     AlertDialog,
@@ -25,7 +25,7 @@ import {
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Logo } from "../logo";
 import { Dialog, DialogTrigger } from "../ui/dialog";
-import { Cart } from "../Cart";
+import { Cart } from "../Cart/Cart";
 
 export const NavigationBar = () => {
     const { isAuthenticated, user, logoutHandler } = useContext(AuthContext);
@@ -35,6 +35,8 @@ export const NavigationBar = () => {
         navigate("/auth/login");
     };
 
+    const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
+
     return (
         <div className="flex items-center w-screen px-4 py-2 bg-white border-b shadow-sm">
             <div className="flex items-center justify-between w-full mx-auto md:max-w-screen-2xl">
@@ -42,14 +44,14 @@ export const NavigationBar = () => {
                 <div className="flex items-center justify-between w-full space-x-4 md:block md:w-auto">
                     {isAuthenticated ? (
                         <div className="flex items-center gap-2">
-                            <Dialog>
+                            <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
                                 <DialogTrigger>
                                     <Button size="icon" variant="secondary">
                                         <ShoppingCart />
                                     </Button>
                                 </DialogTrigger>
 
-                                <Cart />
+                                <Cart closeCart={() => setIsCartOpen(false)}/>
                             </Dialog>
 
                             <Button size="icon" asChild>

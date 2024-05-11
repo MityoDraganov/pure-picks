@@ -43,6 +43,8 @@ const useFormData = <T extends {}>(
                 }));
             }
         } else if ("id" in e && "value" in e) {
+            console.log('here1');
+            
             const { id, value } = e;
             setFormData((prevState) => ({
                 ...prevState,

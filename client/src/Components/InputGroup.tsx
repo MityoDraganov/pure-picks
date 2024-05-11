@@ -1,6 +1,6 @@
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { IMarketplaceSettings, IUser } from "../Interfaces/User.interface";
+import { IMarketplaceSettingsDto, IUser } from "../Interfaces/User.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
 import { cn } from "../lib/utils";
 
@@ -18,7 +18,7 @@ export const InputGroup = ({
   placeHolder: string | undefined;
   value?: any;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  id: keyof IUser | keyof ProductMutableData | keyof IMarketplaceSettings;
+  id: keyof IUser | keyof ProductMutableData | keyof IMarketplaceSettingsDto;
   type?: string;
   className?: string;
   multiple?: boolean;
