@@ -33,6 +33,7 @@ export interface IUserDto {
   rePassword?: string;
   VerifiedStatus: string;
   marketplaceSettings: IMarketplaceSettings;
+  savedProducts: string[];
 }
 
 export interface AuthenticationResponse {
@@ -45,6 +46,7 @@ export interface AuthenticationResponse {
   products: IProduct[];
   VerifiedStatus: string;
   marketplaceSettings: IMarketplaceSettings;
+  savedProducts: string[];
 }
 
 export interface IMarketplaceSettingsDto {

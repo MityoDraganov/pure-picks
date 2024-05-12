@@ -21,7 +21,9 @@ import { QuantitySelect } from "./components/QuantitySelect";
 import { Bookmark, Settings, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProductModal } from "./modals/ProductModal";
-import { addFavourite, removeFavourite } from '../../api/requests';
+import { addFavourite, removeFavourite } from "../../api/requests";
+import { AuthContext } from "../../contexts/AuthContext";
+import { toast } from "../ui/Toast/use-toast";
 
 export const Product = ({
   product,
@@ -47,18 +49,68 @@ export const Product = ({
   const [quantity, setQuantity] = useState<number>(1);
 
   const { addToCart } = useContext(CartContext);
+  const { setAdditionalData, removeAdditionalData, user } =
+    useContext(AuthContext);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
   };
 
   const addFavouriteHandler = async () => {
-    await addFavourite(product._id)
-  }
+    if (!user) {
+      toast({ title: "User not found!" });
+      return;
+    }
+
+
+    // Ensure savedProducts is initialized as an array
+    const savedProducts = user.savedProducts || [];
+    if (savedProducts.includes(product._id)) {
+      toast({ title: "Product already saved!" });
+      return;
+    }
+
+    setAdditionalData("savedProducts", [...savedProducts, product._id]);
+    toast({title: "Product added from favourites!"})
+    const result = await addFavourite(product._id);
+  };
 
   const removeFavouriteHandler = async () => {
-   await removeFavourite(product._id)
-  }
+    try {
+      if (!user) {
+        toast({ title: "User not found!" });
+        return;
+      }
+
+      // Remove the product ID from the savedProducts array
+      const updatedSavedProducts = user.savedProducts.filter(
+        (savedProductId) => savedProductId !== product._id
+      );
+
+      // Call setAdditionalData to update the user's savedProducts
+      setAdditionalData("savedProducts", updatedSavedProducts);
+
+      // Call the API to remove the product from favourites
+      await removeFavourite(product._id);
+
+      toast({ title: "Product removed from favourites!" });
+    } catch (error) {
+      console.error("Error removing product from favourites:", error);
+      toast({
+        title: "Failed to remove product from favourites!",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const bookmarkHandler = async () => {
+    if (user?.savedProducts.includes(product._id)) {
+      removeFavouriteHandler();
+      return;
+    }
+
+    addFavouriteHandler();
+  };
 
   return (
     <Card
@@ -197,8 +249,14 @@ export const Product = ({
 
         {!isOwner && (
           <div className="absolute top-2 right-2">
-            <Button size="icon" variant="ghost" onClick={addFavouriteHandler}>
-              <Bookmark />
+            <Button size="icon" variant="ghost" onClick={bookmarkHandler}>
+              <Bookmark
+                className={`${
+                  user?.savedProducts.includes(product._id)
+                    ? "fill-black"
+                    : "fill-none"
+                }`}
+              />
             </Button>
           </div>
         )}
