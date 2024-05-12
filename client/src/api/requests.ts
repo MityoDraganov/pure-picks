@@ -13,6 +13,8 @@ const endpoints = {
     products: (sellerId: string | null) =>
         sellerId ? `products?seller=${sellerId}` : "products",
 
+    favourite: (productId: string) => `products/favourite/${productId}`,
+
     //orders
     orders: "orders",
 };
@@ -47,6 +49,14 @@ export const getProductsBySeller = (sellerId: string) => {
 export const createProduct = (data: ProductMutableData) => {
     return api.post(endpoints.products(null), data, "formData");
 };
+
+export const addFavourite = (productId: string) => {
+    return api.post(endpoints.favourite(productId))
+}
+
+export const removeFavourite = (productId: string) => {
+    return api.del(endpoints.favourite(productId))
+}
 
 // --ORDERS--
 

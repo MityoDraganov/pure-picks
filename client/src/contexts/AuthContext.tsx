@@ -20,6 +20,20 @@
       setAuth(data);
     };
 
+    const setAdditionalData = (key: keyof IUserDto, data: any) => {
+      if (auth) {
+        setAuth(prevAuth => {
+          return {
+            ...prevAuth,
+            user: {
+              ...prevAuth.user,
+              [key]: data
+            }
+          };
+        });
+      }
+    };
+
     const logoutHandler = () => {
       localStorage.removeItem("Authorization");
       setAuth(null);

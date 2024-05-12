@@ -21,6 +21,7 @@ import { QuantitySelect } from "./components/QuantitySelect";
 import { Bookmark, Settings, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProductModal } from "./modals/ProductModal";
+import { addFavourite, removeFavourite } from '../../api/requests';
 
 export const Product = ({
   product,
@@ -50,6 +51,14 @@ export const Product = ({
   const handleAddToCart = () => {
     addToCart(product, quantity);
   };
+
+  const addFavouriteHandler = async () => {
+    await addFavourite(product._id)
+  }
+
+  const removeFavouriteHandler = async () => {
+   await removeFavourite(product._id)
+  }
 
   return (
     <Card
@@ -188,7 +197,7 @@ export const Product = ({
 
         {!isOwner && (
           <div className="absolute top-2 right-2">
-            <Button size="icon" variant="ghost">
+            <Button size="icon" variant="ghost" onClick={addFavouriteHandler}>
               <Bookmark />
             </Button>
           </div>
