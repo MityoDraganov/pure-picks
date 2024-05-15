@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 
 import { CartContext } from "../../contexts/CartContext";
 import { Button } from "../ui/button";
-import { Receipt, X } from "lucide-react";
+import { ArrowLeft, Receipt, X } from "lucide-react";
 import { DialogContent } from "../ui/dialog";
 import { putOrder } from "../../api/requests";
 import { toast } from "../ui/Toast/use-toast";
@@ -23,7 +23,6 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
   });
 
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
-
 
   const [checkoutStep, setCheckoutStep] = useState<number>(0);
 
@@ -48,7 +47,7 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
   };
 
   const checkoutStepsComponents = [
-    <InitialStep setCheckoutStep={setCheckoutStep}/>,
+    <InitialStep setCheckoutStep={setCheckoutStep} />,
     <AddressStep
       handleSetLocation={handleSetLocation}
       location={checkoutData.buyerLocation}
@@ -61,9 +60,23 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
         cart && cart?.length > 0 ? "h-full" : "h-fit"
       } p-6 overflow-hidden`}
     >
-        <Progress value={(checkoutStep / checkoutStepsComponents.length) * 100}/>
+      <div className="flex h-fit items-center relative">
+        <div className="flex w-[20%] justify-start pl-2 items-center">
+          <ArrowLeft
+            onClick={() => setCheckoutStep(checkoutStep - 1)}
+            className={`hover:cursor-pointer ${
+              checkoutStep > 0 ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        </div>
+
+        <Progress
+          value={(checkoutStep / checkoutStepsComponents.length) * 100}
+          className="w-[70%]"
+        />
+      </div>
       {checkoutStepsComponents.map(
-        (StepComponent, index) => checkoutStep === index  && StepComponent
+        (StepComponent, index) => checkoutStep === index && StepComponent
       )}
     </DialogContent>
   );
