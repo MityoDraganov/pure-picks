@@ -1,9 +1,10 @@
 import * as api from "./api";
 
+import { IMarketplaceSettingsDto, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
+
+import { ICart } from "../Interfaces/Cart.interface";
 import { OrderDto } from "../Interfaces/Order.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
-import { IMarketplaceSettingsDto, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
-import { ICart } from "../Interfaces/Cart.interface";
 
 const endpoints = {
     //auth
@@ -64,6 +65,6 @@ export const getOrdersForBuyer = () => {
     return api.get(endpoints.orders);
 };
 
-export const putOrder = (data: ICart[] | null) => {
-    return api.post(endpoints.orders, { orderedItems: data });
+export const putOrder = (data: OrderDto) => {
+    return api.post(endpoints.orders, data);
 };

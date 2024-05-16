@@ -1,28 +1,24 @@
 import { Dispatch, SetStateAction, useContext } from "react";
+import { Receipt, X } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "../../ui/table";
-import { CartContext } from "../../../contexts/CartContext";
+
 import { Button } from "../../ui/button";
-import { Receipt, X } from "lucide-react";
+import { CartContext } from "../../../contexts/CartContext";
 
 interface InitialStepProps {
-    setCheckoutStep: Dispatch<SetStateAction<number>>
+  setCheckoutStep: Dispatch<SetStateAction<number>>;
 }
 
-export const InitialStep = ({setCheckoutStep} : InitialStepProps) => {
-  const { cart, removeFromCart } = useContext(CartContext);
-  const total = cart?.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0
-  );
+export const InitialStep = ({ setCheckoutStep }: InitialStepProps) => {
+  const { cart, totalCp, removeFromCart } = useContext(CartContext);
 
   return (
     <div
@@ -79,7 +75,7 @@ export const InitialStep = ({setCheckoutStep} : InitialStepProps) => {
                   <p className="flex justify-between w-full">
                     <span>Total price:</span>{" "}
                     <span className="font-semibold text-lg">
-                      {total?.toFixed(2)}$
+                      {totalCp?.toFixed(2)}$
                     </span>
                   </p>
                 </TableCell>

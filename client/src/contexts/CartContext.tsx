@@ -1,10 +1,7 @@
-import {
-  createContext,
-  useEffect,
-  useState,
-} from "react";
-import { IProduct } from "../Interfaces/Product.interface";
+import { createContext, useEffect, useState } from "react";
+
 import { ICart } from "../Interfaces/Cart.interface";
+import { IProduct } from "../Interfaces/Product.interface";
 
 interface ICartContext {
   cart: ICart[] | null;
@@ -12,12 +9,14 @@ interface ICartContext {
   removeFromCart: (product: IProduct) => void;
   editQuantity: (product: IProduct, quantity: number) => void;
   clearCart: () => void;
+  totalCp: number;
 }
 
 export const CartContext = createContext<ICartContext>({} as ICartContext);
 
 export function CartProvider(props: { children: React.ReactNode }) {
   const [cart, setCart] = useState<ICart[]>([]);
+  const [totalCp, setTotalCp] = useState<number>(0);
 
   useEffect(() => {
     // Load cart from local storage on component mount
@@ -30,6 +29,13 @@ export function CartProvider(props: { children: React.ReactNode }) {
   useEffect(() => {
     // Save cart to local storage whenever it changes
     localStorage.setItem("cart", JSON.stringify(cart));
+
+    const total = cart?.reduce(
+      (acc, item) => acc + item.product.price * item.quantity,
+      0
+    );
+
+    setTotalCp(total);
   }, [cart]);
 
   const addToCart = (product: IProduct, quantity: number) => {
@@ -72,6 +78,7 @@ export function CartProvider(props: { children: React.ReactNode }) {
 
   const cartContextValues: ICartContext = {
     cart,
+    totalCp,
     addToCart,
     removeFromCart,
     editQuantity,

@@ -1,33 +1,33 @@
 import { useContext, useState } from "react";
 
-import { CartContext } from "../../contexts/CartContext";
-import { Button } from "../ui/button";
-import { ArrowLeft, Receipt, X } from "lucide-react";
-import { DialogContent } from "../ui/dialog";
-import { putOrder } from "../../api/requests";
-import { toast } from "../ui/Toast/use-toast";
-
-//step pages
 import { AddressStep } from "./pages/AddressStep";
-import { CheckoutDto } from "../../Interfaces/Checkout.interface";
-import useFormData from "../../hooks/useForm";
+import { ArrowLeft } from "lucide-react";
+import { CartContext } from "../../contexts/CartContext";
+import { CheckoutStep } from "./pages/CheckoutStep";
+import { CompletedOrder } from "./pages/CompletedOrder";
+import { DialogContent } from "../ui/dialog";
+import { IOrderSlim } from "../../Interfaces/Order.interface";
 import { InitialStep } from "./pages/InitialStep";
 import { Progress } from "../ui/progress";
+import { putOrder } from "../../api/requests";
+import { toast } from "../ui/Toast/use-toast";
+import useFormData from "../../hooks/useForm";
 
 export const Cart = ({ closeCart }: { closeCart: () => void }) => {
-  const [checkoutData, setCheckoutData] = useFormData<CheckoutDto>({
-    buyerLocation: {
+  const { cart, clearCart } = useContext(CartContext);
+
+  const [checkoutData, setCheckoutData] = useFormData<IOrderSlim>({
+    deliveryAddress: {
       latitude: 0,
       longitude: 0,
     },
+    deliveryNote: "",
   });
-
-  const { cart, removeFromCart, clearCart } = useContext(CartContext);
 
   const [checkoutStep, setCheckoutStep] = useState<number>(0);
 
   const handleCheckout = async () => {
-    await putOrder(cart);
+    await putOrder({orderedItems: cart, ...checkoutData});
     clearCart();
     closeCart();
 
@@ -38,10 +38,8 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
     latitude: number;
     longitude: number;
   }) => {
-    console.log("her");
-
     setCheckoutData({
-      id: "buyerLocation",
+      id: "deliveryAddress",
       value: location,
     });
   };
@@ -49,32 +47,43 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
   const checkoutStepsComponents = [
     <InitialStep setCheckoutStep={setCheckoutStep} />,
     <AddressStep
+      setCheckoutStep={setCheckoutStep}
       handleSetLocation={handleSetLocation}
-      location={checkoutData.buyerLocation}
+      location={checkoutData.deliveryAddress}
+      setCheckoutData={setCheckoutData}
     />,
+    <CheckoutStep
+      checkoutData={{...checkoutData, orderedItems: cart}}
+      handleCheckout={handleCheckout}
+      setCheckoutStep={setCheckoutStep}
+    />,
+    <CompletedOrder />,
   ];
 
   return (
     <DialogContent
       className={`${
         cart && cart?.length > 0 ? "h-full" : "h-fit"
-      } p-6 overflow-hidden`}
+      } p-6 overflow-hidden flex flex-col gap-10`}
     >
-      <div className="flex h-fit items-center relative">
-        <div className="flex w-[20%] justify-start pl-2 items-center">
-          <ArrowLeft
-            onClick={() => setCheckoutStep(checkoutStep - 1)}
-            className={`hover:cursor-pointer ${
-              checkoutStep > 0 ? "opacity-100" : "opacity-0"
-            }`}
+      {checkoutStep !== checkoutStepsComponents.length - 1 && (
+        <div className="flex h-fit items-center relative">
+          <div className="flex w-[20%] justify-start pl-2 items-center">
+            <ArrowLeft
+              onClick={() => setCheckoutStep(checkoutStep - 1)}
+              className={`hover:cursor-pointer ${
+                checkoutStep > 0 ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          </div>
+
+          <Progress
+            value={((checkoutStep + 1) / checkoutStepsComponents.length) * 100}
+            className="w-[70%]"
           />
         </div>
+      )}
 
-        <Progress
-          value={(checkoutStep / checkoutStepsComponents.length) * 100}
-          className="w-[70%]"
-        />
-      </div>
       {checkoutStepsComponents.map(
         (StepComponent, index) => checkoutStep === index && StepComponent
       )}

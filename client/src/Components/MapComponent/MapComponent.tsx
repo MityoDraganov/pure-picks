@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
 import {
   MapContainer,
-  TileLayer,
   Marker,
   Popup,
+  TileLayer,
   useMapEvents,
 } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
 
 interface MapComponentProps {
-  handleSetLocation: (location: {
+  handleSetLocation?: (location: {
     latitude: number;
     longitude: number;
   }) => void;
@@ -16,25 +16,34 @@ interface MapComponentProps {
     latitude: number;
     longitude: number;
   };
+  zoom?: number;
+  mapCenterValues?: [number, number];
+  disabled?: boolean;
 }
 
 export const MapComponent: React.FC<MapComponentProps> = ({
   handleSetLocation,
   location,
+  zoom,
+  mapCenterValues,
+  disabled,
 }) => {
-    const [mapCenter, setMapCenter] = useState<[number, number]>([0, 0]);
-    const mapRef = useRef<any>(null);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(
+    mapCenterValues ?? [0, 0]
+  );
+  const mapRef = useRef<any>(null);
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          handleSetLocation({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          });
+          if (handleSetLocation)
+            handleSetLocation({
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+            });
 
-          setMapCenter([pos.coords.latitude, pos.coords.longitude])
+          setMapCenter([pos.coords.latitude, pos.coords.longitude]);
           mapRef.current.setView([location.latitude, location.longitude]);
         },
         (error) => {
@@ -46,13 +55,12 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     }
   }, [setMapCenter, navigator.geolocation]);
 
-
-
   const handleMapClick = (e: any) => {
-    handleSetLocation({
-      latitude: e.latlng.lat,
-      longitude: e.latlng.lng,
-    });
+    if (handleSetLocation)
+      handleSetLocation({
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng,
+      });
   };
 
   const SetViewOnClick = () => {
@@ -63,14 +71,18 @@ export const MapComponent: React.FC<MapComponentProps> = ({
     return null;
   };
 
-
   return (
-    <>
+    <div className={`${disabled ? "opacity-60" : "opacity-100"}`}>
       <MapContainer
         center={mapCenter}
-        zoom={2}
+        zoom={zoom ?? 2}
         style={{ width: "100%", aspectRatio: 2 / 1 }}
         ref={mapRef}
+        zoomControl={!disabled}
+        dragging={!disabled}
+        scrollWheelZoom={!disabled}
+        touchZoom={!disabled}
+        doubleClickZoom={!disabled}
       >
         <SetViewOnClick />
         <TileLayer
@@ -78,9 +90,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {location.latitude !== 0 && location.longitude !== 0 && (
-          <Marker
-            position={[location.latitude, location.longitude]}
-          >
+          <Marker position={[location.latitude, location.longitude]}>
             <Popup>
               Latitude: {location.latitude}
               <br />
@@ -89,6 +99,6 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           </Marker>
         )}
       </MapContainer>
-    </>
+    </div>
   );
 };
