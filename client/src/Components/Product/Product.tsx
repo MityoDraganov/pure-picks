@@ -65,7 +65,7 @@ export const Product = ({
 
     // Ensure savedProducts is initialized as an array
     const savedProducts = user.savedProducts || [];
-    if (savedProducts.includes(product._id)) {
+    if (savedProducts?.includes(product._id)) {
       toast({ title: "Product already saved!" });
       return;
     }
@@ -104,7 +104,7 @@ export const Product = ({
   };
 
   const bookmarkHandler = async () => {
-    if (user?.savedProducts.includes(product._id)) {
+    if (user?.savedProducts?.includes(product._id)) {
       removeFavouriteHandler();
       return;
     }
@@ -252,7 +252,7 @@ export const Product = ({
             <Button size="icon" variant="ghost" onClick={bookmarkHandler}>
               <Bookmark
                 className={`${
-                  user?.savedProducts.includes(product._id)
+                  user?.savedProducts?.includes(product._id)
                     ? "fill-black"
                     : "fill-none"
                 }`}
