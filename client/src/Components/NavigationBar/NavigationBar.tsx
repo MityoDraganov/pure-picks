@@ -36,7 +36,9 @@ export const NavigationBar = () => {
     navigate("/auth/login");
   };
 
-  const handleMakeAvaliableForDeliveries = () => {};
+  const handleMakeAvaliableForDeliveries = () => {
+    
+  };
 
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 

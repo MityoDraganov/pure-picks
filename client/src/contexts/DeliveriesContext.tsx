@@ -1,6 +1,11 @@
-import * as dotenv from "dotenv";
-
-import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { AuthContext } from "./AuthContext";
 import { IOrder } from "../Interfaces/Order.interface";
@@ -8,29 +13,42 @@ import Pusher from "pusher-js";
 
 interface IDeliveriesContext {
   channel: any;
-  assignedOrder: IOrder,
-  setAssignedOrder: Dispatch<SetStateAction<IOrder>>
+  assignedOrder: IOrder | null;
+  setAssignedOrder: Dispatch<SetStateAction<IOrder | null>>;
 }
-
-dotenv.config();
 
 export const DeliveriesContext = createContext<IDeliveriesContext>(
   {} as IDeliveriesContext
 );
+
 export function DeliveriesProvider(props: any) {
   const { user } = useContext(AuthContext);
-  const [assignedOrder, setAssignedOrder] = useState<IOrder>({} as IOrder)
+  const [assignedOrder, setAssignedOrder] = useState<IOrder | null>(null);
+  const [channel, setChannel] = useState<any>(null);
 
-  const pusher = new Pusher(process.env.PUSHER_KEY || "", {
-    cluster: process.env.PUSHER_CLUSTER || "",
-  });
+  useEffect(() => {
+    if (!user) {
+      console.warn("User is not defined, cannot subscribe to Pusher channel");
+      return;
+    }
 
-  const channel = pusher.subscribe(user?._id!);
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
+      cluster: import.meta.env.VITE_PUSHER_CLUSTER,
+    });
+
+    const userChannel = pusher.subscribe(user._id);
+    setChannel(userChannel);
+
+    return () => {
+      userChannel.unbind_all();
+      userChannel.unsubscribe();
+    };
+  }, [user]);
 
   const DeliveriesContextValues: IDeliveriesContext = {
     channel,
     assignedOrder,
-    setAssignedOrder
+    setAssignedOrder,
   };
 
   return (

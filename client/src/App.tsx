@@ -4,6 +4,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 import { Dashboard } from "./Pages/Dashboard/Dashboard";
 import { DeliveriesProvider } from "./contexts/DeliveriesContext";
+import { Delivery } from "./Pages/Delivery/Delivery";
 import { Home } from "./Pages/Home/Home";
 import { Login } from "./Pages/Auth/Login";
 import { NavigationBar } from "./Components/NavigationBar/NavigationBar";
@@ -33,6 +34,8 @@ function App() {
 
               <Route path="*" element={<Home />} />
             </Routes>
+
+            <Delivery />
           </DeliveriesProvider>
         </CartProvider>
       </AuthProvider>
