@@ -2,7 +2,6 @@ import * as api from "./api";
 
 import { IMarketplaceSettingsDto, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
 
-import { ICart } from "../Interfaces/Cart.interface";
 import { OrderDto } from "../Interfaces/Order.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
 
