@@ -1,6 +1,8 @@
-import { Canvas } from "@react-three/fiber";
 import { Gltf, Text, useGLTF } from "@react-three/drei";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
+import { AuthContext } from "../../contexts/AuthContext";
+import { Canvas } from "@react-three/fiber";
 import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
@@ -18,7 +20,13 @@ export const Home = () => {
     setHoveredCanvas(null);
   };
 
-  //"buyer", "farmer", "deliverer", "admin"
+  const { isAuthenticated } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="h-screen">
