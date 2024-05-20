@@ -1,69 +1,86 @@
 import * as api from "./api";
 
-import { IMarketplaceSettingsDto, UserLoginData, UserRegisterData } from "../Interfaces/User.interface";
+import {
+  IMarketplaceSettingsDto,
+  UserLoginData,
+  UserRegisterData,
+} from "../Interfaces/User.interface";
 
 import { OrderDto } from "../Interfaces/Order.interface";
 import { ProductMutableData } from "../Interfaces/Product.interface";
 
 const endpoints = {
-    //auth
-    auth: (path: string | undefined) => `auth/${path}`,
+  //auth
+  auth: (path: string | undefined) => `auth/${path}`,
 
-    //products
-    products: (sellerId: string | null) =>
-        sellerId ? `products?seller=${sellerId}` : "products",
+  //products
+  products: (sellerId: string | null) =>
+    sellerId ? `products?seller=${sellerId}` : "products",
 
-    favourite: (productId: string) => `products/favourite/${productId}`,
+  favourite: (productId: string) => `products/favourite/${productId}`,
 
-    //orders
-    orders: "orders",
+  //orders
+  orders: "orders",
+
+  //deliveries
+  deliveries: (avaliable: boolean) =>
+    "deliveries/deliverer/" + (avaliable ? "makeAvaliable" : "makeUnAvaliable"),
 };
 
 // --AUTH--
 export const register = (body: UserRegisterData) => {
-    return api.post(endpoints.auth("register"), body);
+  return api.post(endpoints.auth("register"), body);
 };
 
 export const login = (body: UserLoginData) => {
-    return api.post(endpoints.auth("login"), body);
+  return api.post(endpoints.auth("login"), body);
 };
 
 export const getProfileData = (userId: string | undefined) => {
-    return api.get(endpoints.auth(userId))
+  return api.get(endpoints.auth(userId));
 };
 
 export const requestVerification = (body: IMarketplaceSettingsDto) => {
-    return api.post(endpoints.auth("verification/request"), body, "formData")
-}
+  return api.post(endpoints.auth("verification/request"), body, "formData");
+};
 
 // --PRODUCTS--
 
 export const getAllProducts = () => {
-    return api.get(endpoints.products(null));
+  return api.get(endpoints.products(null));
 };
 
 export const getProductsBySeller = (sellerId: string) => {
-    return api.get(endpoints.products(sellerId));
+  return api.get(endpoints.products(sellerId));
 };
 
 export const createProduct = (data: ProductMutableData) => {
-    return api.post(endpoints.products(null), data, "formData");
+  return api.post(endpoints.products(null), data, "formData");
 };
 
 export const addFavourite = (productId: string) => {
-    return api.post(endpoints.favourite(productId))
-}
+  return api.post(endpoints.favourite(productId));
+};
 
 export const removeFavourite = (productId: string) => {
-    return api.del(endpoints.favourite(productId))
-}
+  return api.del(endpoints.favourite(productId));
+};
 
 // --ORDERS--
 
 export const getOrdersForBuyer = () => {
-    return api.get(endpoints.orders);
+  return api.get(endpoints.orders);
 };
 
 export const putOrder = (data: OrderDto) => {
-    return api.post(endpoints.orders, data);
+  return api.post(endpoints.orders, data);
+};
+
+// --DELIVERIES--
+export const makeAvaliable = () => {
+  return api.post(endpoints.deliveries(true));
+};
+
+export const makeUnAvaliable = () => {
+  return api.post(endpoints.deliveries(false));
 };

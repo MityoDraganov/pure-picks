@@ -7,6 +7,8 @@ import {
 } from "react-leaflet";
 import { useEffect, useRef, useState } from "react";
 
+import { RoutingMachine } from "../RouteComponent/RouteComponent";
+
 interface MapComponentProps {
   handleSetLocation?: (location: {
     latitude: number;
@@ -89,6 +91,8 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
+        <RoutingMachine />
         {location.latitude !== 0 && location.longitude !== 0 && (
           <Marker position={[location.latitude, location.longitude]}>
             <Popup>

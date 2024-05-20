@@ -1,47 +1,43 @@
 import { createContext, useEffect, useState } from "react";
 
-import { AuthenticationResponse, IUserDto } from "../Interfaces/User.interface";
+import { IUserDto } from "../Interfaces/User.interface";
 
 interface IAuthContext {
-  signUser: (data: AuthenticationResponse) => void;
+  signUser: (data: IUserDto) => void;
   user: IUserDto | null;
   token: string | null;
   isAuthenticated: boolean;
   logoutHandler: () => void;
-  setAdditionalData: (key: keyof AuthenticationResponse, data: any) => void;
-  removeAdditionalData: (key: keyof AuthenticationResponse) => void;
+  setAdditionalData: (key: keyof IUserDto, data: any) => void;
+  removeAdditionalData: (key: keyof IUserDto) => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider(props: any) {
-  const [auth, setAuth] = useState<AuthenticationResponse | null>(null);
+  const [auth, setAuth] = useState<IUserDto | null>(null);
 
-  const signUser = (data: AuthenticationResponse) => {
+  const signUser = (data: IUserDto) => {
     localStorage.setItem("Authorization", JSON.stringify(data));
     setAuth(data);
   };
 
-  const setAdditionalData = (key: keyof AuthenticationResponse, data: any) => {
-    setAuth((prevAuth) => {
-      if (!prevAuth) return null; // Null check
+  const setAdditionalData = (key: keyof IUserDto, data: any) => {
+    setAuth((prevAuth: any) => {
+      if (!prevAuth) return null;
       return {
         ...prevAuth,
-        
         [key]: data,
       };
     });
   };
 
-  const removeAdditionalData = (key: keyof AuthenticationResponse) => {
+  const removeAdditionalData = (key: keyof IUserDto) => {
     if (auth) {
-      setAuth((prevAuth) => {
-        if (!prevAuth) return null; // Null check
-        // Clone the user object
+      setAuth((prevAuth: any) => {
+        if (!prevAuth) return null;
         const updatedUser = { ...prevAuth };
-        // Delete the specified key from the cloned user object
-        delete (updatedUser as any)[key];
-        // Return the updated auth object with the modified user object
+        delete updatedUser[key];
         return {
           ...prevAuth,
           user: updatedUser,
@@ -60,7 +56,7 @@ export function AuthProvider(props: any) {
       const data = JSON.parse(localStorage["Authorization"]);
       setAuth(data);
     }
-  }, [AuthContext]);
+  }, []);
 
   const authContextValues: IAuthContext = {
     signUser,

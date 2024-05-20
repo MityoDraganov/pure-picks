@@ -25,6 +25,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Button } from "../ui/button";
 import { Cart } from "../Cart/Cart";
+import { DeliveryTrigger } from "./components/DeliveryTrigger";
 import { Logo } from "../logo";
 
 export const NavigationBar = () => {
@@ -36,10 +37,6 @@ export const NavigationBar = () => {
     navigate("/auth/login");
   };
 
-  const handleMakeAvaliableForDeliveries = () => {
-    
-  };
-
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 
   return (
@@ -47,31 +44,7 @@ export const NavigationBar = () => {
       <div className="flex items-center justify-between w-full mx-auto md:max-w-screen-2xl">
         <Logo />
 
-        {user?.type === "deliverer" && (
-          <AlertDialog>
-            <AlertDialogTrigger className="w-[15%]">
-              <Button asChild variant="blue" size="icon" className="w-full">
-                <Truck />
-              </Button>
-            </AlertDialogTrigger>
-
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Are you sure that you want to go avaliable for deliveries?
-                </AlertDialogTitle>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => handleMakeAvaliableForDeliveries}
-                >
-                  Go avaliable
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
+        {user?.type === "deliverer" && <DeliveryTrigger />}
 
         <div className="flex items-center justify-between w-full space-x-4 md:block md:w-auto">
           {isAuthenticated ? (

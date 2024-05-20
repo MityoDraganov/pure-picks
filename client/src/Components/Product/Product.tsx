@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { CartContext } from "../../contexts/CartContext";
-import { IProduct } from "../../Interfaces/Product.interface";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Avatar, AvatarImage } from "../ui/avatar";
+import { Bookmark, Settings, ShoppingCart } from "lucide-react";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -9,20 +8,20 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import { Card, CardContent, CardFooter } from "../ui/card";
-import { Avatar, AvatarImage } from "../ui/avatar";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { addFavourite, removeFavourite } from "../../api/requests";
+
+import { AuthContext } from "../../contexts/AuthContext";
 import { Button } from "../ui/button";
-
-import { Rating } from "./components/Rating";
-import { QuantitySelect } from "./components/QuantitySelect";
-
-import { Bookmark, Settings, ShoppingCart } from "lucide-react";
+import { CartContext } from "../../contexts/CartContext";
+import { IProduct } from "../../Interfaces/Product.interface";
+import { Label } from "../ui/label";
 import { Link } from "react-router-dom";
 import { ProductModal } from "./modals/ProductModal";
-import { addFavourite, removeFavourite } from "../../api/requests";
-import { AuthContext } from "../../contexts/AuthContext";
+import { QuantitySelect } from "./components/QuantitySelect";
+import { Rating } from "./components/Rating";
+import { Textarea } from "../ui/textarea";
 import { toast } from "../ui/Toast/use-toast";
 
 export const Product = ({
@@ -83,7 +82,7 @@ export const Product = ({
       }
 
       // Remove the product ID from the savedProducts array
-      const updatedSavedProducts = user.savedProducts.filter(
+      const updatedSavedProducts = user?.savedProducts?.filter(
         (savedProductId) => savedProductId !== product._id
       );
 
@@ -141,8 +140,8 @@ export const Product = ({
               <DialogContent>
                 <Carousel className="w-[80%] flex flex-col m-auto">
                   <CarouselContent>
-                    {product.contentUrls.map((x) => (
-                      <CarouselItem>
+                    {product.contentUrls.map((x, index) => (
+                      <CarouselItem key={`${x}_${index}`}>
                         <img
                           draggable={false}
                           className="w-full aspect-square object-cover rounded-sm"

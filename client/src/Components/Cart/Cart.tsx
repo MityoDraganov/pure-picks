@@ -27,7 +27,7 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
   const [checkoutStep, setCheckoutStep] = useState<number>(0);
 
   const handleCheckout = async () => {
-    await putOrder({orderedItems: cart, ...checkoutData});
+    await putOrder({ orderedItems: cart, ...checkoutData });
     clearCart();
     closeCart();
 
@@ -45,19 +45,21 @@ export const Cart = ({ closeCart }: { closeCart: () => void }) => {
   };
 
   const checkoutStepsComponents = [
-    <InitialStep setCheckoutStep={setCheckoutStep} />,
+    <InitialStep setCheckoutStep={setCheckoutStep} key="InitialStep" />,
     <AddressStep
       setCheckoutStep={setCheckoutStep}
       handleSetLocation={handleSetLocation}
       location={checkoutData.deliveryAddress}
       setCheckoutData={setCheckoutData}
+      key="AddressStep"
     />,
     <CheckoutStep
-      checkoutData={{...checkoutData, orderedItems: cart}}
+      checkoutData={{ ...checkoutData, orderedItems: cart }}
       handleCheckout={handleCheckout}
       setCheckoutStep={setCheckoutStep}
+      key="CheckoutStep"
     />,
-    <CompletedOrder />,
+    <CompletedOrder key="CompletedOrder" />,
   ];
 
   return (

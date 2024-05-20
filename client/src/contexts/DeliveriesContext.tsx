@@ -28,7 +28,7 @@ export function DeliveriesProvider(props: any) {
 
   useEffect(() => {
     if (!user) {
-      console.warn("User is not defined, cannot subscribe to Pusher channel");
+      console.error("User is not defined, cannot subscribe to Pusher channel");
       return;
     }
 
@@ -36,7 +36,7 @@ export function DeliveriesProvider(props: any) {
       cluster: import.meta.env.VITE_PUSHER_CLUSTER,
     });
 
-    const userChannel = pusher.subscribe(user._id);
+    const userChannel = pusher.subscribe(user._id!);
     setChannel(userChannel);
 
     return () => {

@@ -5,9 +5,15 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
-  rePassword: string;
-  type: string;
-  products: IProduct[];
+  rePassword?: string;
+  type: 'buyer' | 'farmer' | 'deliverer' | 'admin';
+  products?: IProduct[];
+  VerifiedStatus?: 'Verified' | 'Pending' | 'Non-verified';
+  marketplaceSettings?: IMarketplaceSettings;
+  orders?: string[]; // Assuming orders are represented by their IDs
+  savedProducts?: string[];
+  availableForDelivery?: boolean;
+  assignedDeliveries?: string[];
 }
 
 export interface UserLoginData {
@@ -24,30 +30,44 @@ export interface UserRegisterData {
 }
 
 export interface IUserDto {
+  _id: string;
   username: string;
   email: string;
-  type: string;
-  _id: string;
-  __v: number;
+  token: string;
   password?: string;
   rePassword?: string;
-  VerifiedStatus: string;
-  marketplaceSettings: IMarketplaceSettings;
-  savedProducts: string[];
+  type: 'buyer' | 'farmer' | 'deliverer' | 'admin';
+
+  
+  VerifiedStatus?: 'Verified' | 'Pending' | 'Non-verified';
+  
+  //seller
+  products?: IProduct[];
+  marketplaceSettings?: IMarketplaceSettings;
+  
+  //buyer
+  orders?: string[]; // Assuming orders are represented by their IDs
+  savedProducts?: string[];
+
+  //deliverer
+  availableForDelivery?: boolean;
+  assignedDeliveries?: string[];
 }
 
-export interface AuthenticationResponse {
-  username: string;
-  email: string;
-  type: string;
-  _id: string;
-  __v: number;
-  token: string;
-  products: IProduct[];
-  VerifiedStatus: string;
-  marketplaceSettings: IMarketplaceSettings;
-  savedProducts: string[];
-}
+// export interface AuthenticationResponse {
+//   _id: string;
+//   username: string;
+//   email: string;
+//   type: 'buyer' | 'farmer' | 'deliverer' | 'admin';
+//   products?: IProduct[];
+//   VerifiedStatus?: 'Verified' | 'Pending' | 'Non-verified';
+//   marketplaceSettings?: IMarketplaceSettings;
+//   orders?: string[]; // Assuming orders are represented by their IDs
+//   savedProducts?: string[];
+//   availableForDelivery?: boolean;
+//   assignedDeliveries?: string[];
+// }
+
 
 export interface IMarketplaceSettingsDto {
   documents: File[] | null;
