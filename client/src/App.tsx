@@ -14,7 +14,7 @@ import { Toaster } from "./Components/ui/Toast/toaster";
 
 function App() {
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden h-screen">
       <Toaster />
       <AuthProvider>
         <CartProvider>

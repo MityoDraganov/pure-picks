@@ -13,14 +13,15 @@ export interface OrderDto {
 }
 
 export interface IOrderSlim {
-    deliveryAddress: {
-      latitude: number;
-      longitude: number;
-    };
-    deliveryNote: string;
+  deliveryAddress: {
+    latitude: number;
+    longitude: number;
+    locationName: string;
+  };
+  deliveryNote: string;
 }
 
-export interface IOrder {
+export interface IOrder extends IOrderSlim {
   buyer: IUser;
   orderedItems: [
     {
