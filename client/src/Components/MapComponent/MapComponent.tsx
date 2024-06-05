@@ -21,6 +21,7 @@ interface MapComponentProps {
   zoom?: number;
   mapCenterValues?: [number, number];
   disabled?: boolean;
+  isRouting?: boolean;
 }
 
 export const MapComponent: React.FC<MapComponentProps> = ({
@@ -29,6 +30,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
   zoom,
   mapCenterValues,
   disabled,
+  isRouting,
 }) => {
   const [mapCenter, setMapCenter] = useState<[number, number]>(
     mapCenterValues ?? [0, 0]
@@ -92,7 +94,8 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <RoutingMachine />
+        {isRouting && <RoutingMachine />}
+
         {location.latitude !== 0 && location.longitude !== 0 && (
           <Marker position={[location.latitude, location.longitude]}>
             <Popup>
