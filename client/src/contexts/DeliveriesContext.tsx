@@ -15,6 +15,8 @@ interface IDeliveriesContext {
   channel: any;
   assignedOrder: IOrder | null;
   setAssignedOrder: Dispatch<SetStateAction<IOrder | null>>;
+  isOrderAccepted: boolean;
+  setIsOrderAccepted: Dispatch<SetStateAction<boolean>>;
 }
 
 export const DeliveriesContext = createContext<IDeliveriesContext>(
@@ -24,6 +26,7 @@ export const DeliveriesContext = createContext<IDeliveriesContext>(
 export function DeliveriesProvider(props: any) {
   const { user } = useContext(AuthContext);
   const [assignedOrder, setAssignedOrder] = useState<IOrder | null>(null);
+  const [isOrderAccepted, setIsOrderAccepted] = useState<boolean>(false);
   const [channel, setChannel] = useState<any>(null);
 
   useEffect(() => {
@@ -49,6 +52,8 @@ export function DeliveriesProvider(props: any) {
     channel,
     assignedOrder,
     setAssignedOrder,
+    isOrderAccepted,
+    setIsOrderAccepted,
   };
 
   return (

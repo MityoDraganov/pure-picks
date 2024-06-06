@@ -25,6 +25,8 @@ const endpoints = {
   //deliveries
   deliveries: (avaliable: boolean) =>
     "deliveries/deliverer/" + (avaliable ? "makeAvaliable" : "makeUnAvaliable"),
+
+  acceptOrder: (orderId: string) => `deliverer/acceptOrder/${orderId}`,
 };
 
 // --AUTH--
@@ -83,4 +85,8 @@ export const makeAvaliable = () => {
 
 export const makeUnAvaliable = () => {
   return api.post(endpoints.deliveries(false));
+};
+
+export const acceptOrder = (orderId: string) => {
+  return api.post(endpoints.acceptOrder(orderId));
 };

@@ -15,11 +15,17 @@ import { DeliveriesContext } from "../../contexts/DeliveriesContext";
 import { IOrder } from "../../Interfaces/Order.interface";
 import { Label } from "../../Components/ui/label";
 import { Textarea } from "../../Components/ui/textarea";
+import { acceptOrder } from "../../api/requests";
 import useGeocoding from "../../hooks/useGeocoding";
 
 export const Delivery = () => {
-  const { channel, setAssignedOrder, assignedOrder } =
-    useContext(DeliveriesContext);
+  const {
+    channel,
+    setAssignedOrder,
+    assignedOrder,
+    isOrderAccepted,
+    setIsOrderAccepted,
+  } = useContext(DeliveriesContext);
 
   const { reversedLocation } = useGeocoding(
     assignedOrder?.deliveryAddress.latitude || 0,
@@ -32,7 +38,11 @@ export const Delivery = () => {
       return;
     }
 
-    const handleAssignOrder = (order: { chunk: string }) => {
+    const handleUnAssignOrder = () => {
+      setAssignedOrder(null);
+    };
+
+    const handleReceivePendingOrder = (order: { chunk: string }) => {
       const parsedOrder = JSON.parse(order.chunk);
       console.log(parsedOrder);
 
@@ -40,15 +50,12 @@ export const Delivery = () => {
       setAssignedOrder(parsedOrder);
     };
 
-    const handleUnAssignOrder = () => {
-      setAssignedOrder(null);
-    };
+    channel.bind("order-receive", handleReceivePendingOrder);
 
-    channel.bind("order-assigned", handleAssignOrder);
     channel.bind("order-unassigned", handleUnAssignOrder);
 
     return () => {
-      channel.unbind("order-assigned", handleAssignOrder);
+      channel.unbind("order-receive", handleReceivePendingOrder);
       channel.unbind("order-unassigned", handleUnAssignOrder);
     };
   }, [channel, setAssignedOrder]);
@@ -76,8 +83,17 @@ export const Delivery = () => {
     console.log(reversedLocation);
   }, [reversedLocation]);
 
+  const handleDenyOrder = () => {
+    setAssignedOrder(null);
+  };
+
+  const handleAcceptOrder = async () => {
+    setIsOrderAccepted(true);
+    await acceptOrder(assignedOrder!._id);
+  };
+
   return (
-    <Drawer open={assignedOrder !== null}>
+    <Drawer open={assignedOrder !== null && isOrderAccepted === false}>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle className="flex gap-4 items-center">
@@ -107,9 +123,11 @@ export const Delivery = () => {
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <Button>Accept delivery</Button>
+          <Button onClick={handleAcceptOrder}>Accept delivery</Button>
           <DrawerClose asChild>
-            <Button variant="outline">Deny</Button>
+            <Button variant="outline" onClick={handleDenyOrder}>
+              Deny
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
