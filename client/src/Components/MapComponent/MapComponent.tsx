@@ -22,6 +22,10 @@ interface MapComponentProps {
   mapCenterValues?: [number, number];
   disabled?: boolean;
   isRouting?: boolean;
+  deliveryLocation?: {
+    latitude: number;
+    longitude: number;
+  };
 }
 
 export const MapComponent: React.FC<MapComponentProps> = ({
@@ -31,6 +35,7 @@ export const MapComponent: React.FC<MapComponentProps> = ({
   mapCenterValues,
   disabled,
   isRouting,
+  deliveryLocation,
 }) => {
   const [mapCenter, setMapCenter] = useState<[number, number]>(
     mapCenterValues ?? [0, 0]
@@ -94,16 +99,21 @@ export const MapComponent: React.FC<MapComponentProps> = ({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {isRouting && <RoutingMachine />}
-
-        {location.latitude !== 0 && location.longitude !== 0 && (
-          <Marker position={[location.latitude, location.longitude]}>
-            <Popup>
-              Latitude: {location.latitude}
-              <br />
-              Longitude: {location.longitude}
-            </Popup>
-          </Marker>
+        {isRouting && deliveryLocation ? (
+          <div className="pointer-events-none">
+            <RoutingMachine />
+          </div>
+        ) : (
+          location.latitude !== 0 &&
+          location.longitude !== 0 && (
+            <Marker position={[location.latitude, location.longitude]}>
+              <Popup>
+                Latitude: {location.latitude}
+                <br />
+                Longitude: {location.longitude}
+              </Popup>
+            </Marker>
+          )
         )}
       </MapContainer>
     </div>

@@ -26,7 +26,7 @@ const endpoints = {
   deliveries: (avaliable: boolean) =>
     "deliveries/deliverer/" + (avaliable ? "makeAvaliable" : "makeUnAvaliable"),
 
-  acceptOrder: (orderId: string) => `deliverer/acceptOrder/${orderId}`,
+  acceptOrder: (orderId: string) => `deliveries/deliverer/acceptOrder/${orderId}`,
 };
 
 // --AUTH--

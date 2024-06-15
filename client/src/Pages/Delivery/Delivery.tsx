@@ -8,12 +8,13 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "../../Components/ui/drawer";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Button } from "../../Components/ui/button";
 import { DeliveriesContext } from "../../contexts/DeliveriesContext";
 import { IOrder } from "../../Interfaces/Order.interface";
 import { Label } from "../../Components/ui/label";
+import { MapComponent } from "../../Components/MapComponent/MapComponent";
 import { Textarea } from "../../Components/ui/textarea";
 import { acceptOrder } from "../../api/requests";
 import useGeocoding from "../../hooks/useGeocoding";
@@ -132,5 +133,87 @@ export const Delivery = () => {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  );
+};
+
+export const DeliveryInstructionsPage = () => {
+  const { assignedOrder } = useContext(DeliveriesContext);
+
+  const [delivererLocation, setDelivererLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  }>();
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setDelivererLocation({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        });
+      });
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, [navigator.geolocation]);
+
+  if (
+    !assignedOrder ||
+    !assignedOrder.deliveryAddress.latitude ||
+    !assignedOrder.deliveryAddress.longitude
+  ) {
+    return;
+  }
+
+  if (!delivererLocation) {
+    return;
+  }
+
+  return (
+    <div className="md:w-1/2 m-auto h-full flex flex-col justify-center gap-6">
+      {/* Personal Data */}
+      <div className="flex flex-col gap-2">
+        <h1 className="flex gap-2">
+          <p>Delivery for: </p>
+          <p className="flex gap-2">
+            <span className="font-semibold">
+              {assignedOrder?.buyer.username},
+            </span>
+            <span>{assignedOrder.buyer.email}</span>
+          </p>
+        </h1>
+
+        <div>
+          <p>{assignedOrder?.deliveryAddress.locationName}</p>
+          <p className="flex flex-col">
+            <span>latitude: {assignedOrder?.deliveryAddress.latitude}</span>
+            <span>longitude: {assignedOrder?.deliveryAddress.longitude}</span>
+          </p>
+        </div>
+      </div>
+
+      {/* Ordered Products */}
+      <div className="flex flex-col h-[10%] overflow-auto">
+          <h2 className="font-semibold">Ordered products:</h2>
+        {assignedOrder.orderedItems.map((x) => (
+          <p>
+            {x.product.name} X {x.quantity}
+          </p>
+        ))}
+      </div>
+
+      {/* Map */}
+      <div>
+        <MapComponent
+          isRouting
+          deliveryLocation={{
+            latitude: assignedOrder.deliveryAddress.latitude,
+            longitude: assignedOrder.deliveryAddress.longitude,
+          }}
+          location={delivererLocation}
+          handleSetLocation={setDelivererLocation}
+        />
+      </div>
+    </div>
   );
 };

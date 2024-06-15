@@ -61,7 +61,6 @@ export const Product = ({
       return;
     }
 
-
     // Ensure savedProducts is initialized as an array
     const savedProducts = user.savedProducts || [];
     if (savedProducts?.includes(product._id)) {
@@ -70,7 +69,7 @@ export const Product = ({
     }
 
     setAdditionalData("savedProducts", [...savedProducts, product._id]);
-    toast({title: "Product added from favourites!"})
+    toast({ title: "Product added from favourites!" });
     const result = await addFavourite(product._id);
   };
 
@@ -174,22 +173,21 @@ export const Product = ({
             asCard ? "w-full" : "w-3/4"
           } flex flex-col gap-4 items-start`}
         >
-          {!isOwner && (
-            <Link to={`/auth/profile/${product.seller._id}`}>
-              <div className="flex gap-2 items-center group">
-                <Avatar>
-                  <AvatarImage
-                    draggable={false}
-                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${product.seller.username}&radius=50&backgroundColor=a3a3a3&fontSize=35&bold=true`}
-                    alt="User avatar"
-                  />
-                </Avatar>
-                <h2 className="font-semibold text-lg group-hover:underline">
-                  {product.seller.username}
-                </h2>
-              </div>
-            </Link>
-          )}
+          <Link to={`/auth/profile/${product.seller._id}`}>
+            <div className="flex gap-2 items-center group">
+              <Avatar>
+                <AvatarImage
+                  draggable={false}
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${product.seller.username}&radius=50&backgroundColor=a3a3a3&fontSize=35&bold=true`}
+                  alt="User avatar"
+                />
+              </Avatar>
+              <h2 className="font-semibold text-lg group-hover:underline">
+                {`${product.seller.username} ${isOwner && "(Me)"}` }
+              </h2>
+            </div>
+          </Link>
+
           <div className="w-full flex flex-col gap-4">
             <h2 className="text-xl font-semibold">
               {product.name.charAt(0).toUpperCase() + product.name.slice(1)}

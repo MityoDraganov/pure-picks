@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+
 import { CardContent } from "../../../Components/ui/card";
-import { getOrdersForBuyer } from "../../../api/requests";
-import { Order } from "../../../Components/Order/Order";
 import {IOrder} from "../../../Interfaces/Order.interface"
+import { Order } from "../../../Components/Order/Order";
+import { getOrdersForBuyer } from "../../../api/requests";
 
 export const IndividualPfComp = () => {
     const [orders, setOrders] = useState<IOrder[]>();
@@ -14,9 +15,9 @@ export const IndividualPfComp = () => {
     }, []);
 
     return (
-        <CardContent className="mt-5 flex flex-col gap-2 h-min">
+        <CardContent className=" flex flex-col  overflow-auto h-full">
             <h2 className="text-xl font-semibold">Orders</h2>
-            <div className="h-full">
+            <div className="h-full overflow-auto pb-4">
                 {(orders && orders.length > 0) ? orders.map((x: IOrder) => <Order {...x}/>) : <p>No orders yet!</p>}
             </div>
         </CardContent>
