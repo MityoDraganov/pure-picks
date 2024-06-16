@@ -34,6 +34,9 @@ export const SellerPfComp = ({
 
   const { user } = useContext(AuthContext);
 
+  console.log(user);
+  
+
   useEffect(() => {
     (async () => {
       if (!userId) {
@@ -94,7 +97,12 @@ export const SellerPfComp = ({
         </TabsContent>
 
         <TabsContent value="orders" className="w-full">
-           {(user && user.orders && user.orders.length > 0) ? user.orders.map((x: IOrder) => <Order {...x}/>) : <p>No orders yet!</p>}
+          {user && user.orders && user.orders.length > 0 ? (
+            user.orders.map((x: IOrder) => <Order {...x} />)
+          ) : (
+            <p>No orders yet!</p>
+          )}
+
         </TabsContent>
       </Tabs>
     </CardContent>

@@ -1,3 +1,4 @@
+import { IOrder } from "./Order.interface";
 import { IProduct } from "./Product.interface";
 
 export interface IUser {
@@ -46,7 +47,7 @@ export interface IUserDto {
   marketplaceSettings?: IMarketplaceSettings;
   
   //buyer
-  orders?: string[]; // Assuming orders are represented by their IDs
+  orders?: IOrder[]; // Assuming orders are represented by their IDs
   savedProducts?: string[];
 
   //deliverer

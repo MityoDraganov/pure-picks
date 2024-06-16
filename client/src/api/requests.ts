@@ -14,8 +14,9 @@ const endpoints = {
   auth: (path: string | undefined) => `auth/${path}`,
 
   //products
-  products: (sellerId: string | null) =>
-    sellerId ? `products?seller=${sellerId}` : "products",
+  productsBySeller: (sellerId: string) => `products?seller=${sellerId}`,
+  products: (productId: string | null | undefined) =>
+    productId ? `products/${productId}` : "products",
 
   favourite: (productId: string) => `products/favourite/${productId}`,
 
@@ -26,7 +27,8 @@ const endpoints = {
   deliveries: (avaliable: boolean) =>
     "deliveries/deliverer/" + (avaliable ? "makeAvaliable" : "makeUnAvaliable"),
 
-  acceptOrder: (orderId: string) => `deliveries/deliverer/acceptOrder/${orderId}`,
+  acceptOrder: (orderId: string) =>
+    `deliveries/deliverer/acceptOrder/${orderId}`,
 };
 
 // --AUTH--
@@ -53,12 +55,20 @@ export const getAllProducts = () => {
 };
 
 export const getProductsBySeller = (sellerId: string) => {
-  return api.get(endpoints.products(sellerId));
+  return api.get(endpoints.productsBySeller(sellerId));
 };
 
 export const createProduct = (data: ProductMutableData) => {
   return api.post(endpoints.products(null), data, "formData");
 };
+
+export const editProduct = (data: ProductMutableData, productId: string | undefined) => {
+  return api.patch(endpoints.products(productId), data, "formData");
+};
+
+export const deleteProduct = (productId: string  | undefined) => {
+    return api.del(endpoints.products(productId));
+}
 
 export const addFavourite = (productId: string) => {
   return api.post(endpoints.favourite(productId));

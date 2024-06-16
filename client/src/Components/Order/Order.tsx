@@ -24,6 +24,8 @@ import {
 import { IOrder } from "../../Interfaces/Order.interface";
 
 export const Order = (order: IOrder) => {
+  console.log(order);
+  
   return (
     <Accordion type="single" collapsible className="h-fit">
       <AccordionItem value="item-1">
