@@ -183,7 +183,7 @@ export const Product = ({
                 />
               </Avatar>
               <h2 className="font-semibold text-lg group-hover:underline">
-                {`${product.seller.username} ${isOwner && "(Me)"}` }
+                {`${product.seller.username} ${isOwner && "(Me)"}`}
               </h2>
             </div>
           </Link>
@@ -258,6 +258,22 @@ export const Product = ({
           </div>
         )}
       </CardFooter>
+
+      {!asCard && (
+        <div className="absolute right-4 top-0 flex gap-4">
+          {product.seller.VerifiedStatus === "Verified" && (
+            <h3 className="bg-cyan-600 pt px-10 pt-2 pb-4 rounded-bl-3xl rounded-br-3xl text-slate-50 font-semibold">
+              Verified seller
+            </h3>
+          )}
+
+          {product.isAdvertised && (
+            <h3 className="bg-green-600 pt px-10 pt-2 pb-4 rounded-bl-3xl rounded-br-3xl text-slate-50 font-semibold">
+              advertised
+            </h3>
+          )}
+        </div>
+      )}
     </Card>
   );
 };

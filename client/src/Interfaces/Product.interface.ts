@@ -10,6 +10,7 @@ export interface IProduct {
   contentUrls: string[];
   seller: IUser;
   ratings: number[];
+  isAdvertised: boolean;
 }
 
 export interface ProductMutableData {
